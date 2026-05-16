@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>Wine Cellar</title>
+<style>
+:root {
+  --bg:#0a0604; --bg2:#130e08; --bg3:#1e1509; --bg4:#2a1d0c;
+  --gold:#b8901a; --gold2:#d4a835; --gold3:#f0c840;
+  --text:#f0e4cc; --text2:#c0a060; --text3:#806040; --text4:#504030;
+  --red:#dc2626; --red-t:#fca5a5;
+  --orange:#ea580c; --orange-t:#fdba74;
+  --amber:#d97706; --amber-t:#fcd34d;
+  --green:#16a34a; --green-t:#86efac;
+  --blue:#4338ca; --blue-t:#a5b4fc;
+  --cellar:#92400e; --cellar-t:#fbbf24;
+  --chiller:#0e7490; --chiller-t:#67e8f9;
+  --apt:#5b21b6; --apt-t:#c4b5fd;
+  --radius:14px; --radius-sm:8px;
+  --safe-bottom: env(safe-area-inset-bottom, 20px);
+}
+* { box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent; }
+html, body { height:100%; overflow:hidden; }
+body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text',Georgia,serif; }
+
+/* ── SCREENS ─────────────────────────────────────────────────────── */
+.screen { position:fixed; inset:0; display:none; flex-direction:column; overflow:hidden; }
+.screen.active { display:flex; }
+
+/* ── HEADER ──────────────────────────────────────────────────────── */
+.app-header {
+  background:linear-gradient(180deg,#1e0d00 0%,#2d1500 100%);
+  padding:52px 16px 12px;
+  border-bottom:1px solid #3a2510;
+  flex-shrink:0;
+}
+.app-header h1 { font-size:1.5rem; font-weight:400; color:#f5e6c8; letter-spacing:.03em; }
+.app-header .subtitle { font-size:.72rem; color:var(--text3); letter-spacing:.15em; text-transform:uppercase; margin-bottom:4px; }
+.stats-row { display:flex; gap:12px; margin-top:8px; flex-wrap:wrap; }
+.stat-chip { background:var(--bg4); border:1px solid #3a2510; border-radius:20px; padding:3px 10px; font-size:.72rem; color:var(--text2); }
+.stat-chip strong { color:var(--gold3); }
+
+/* ── FILTER BAR ──────────────────────────────────────────────────── */
+.filter-bar {
+  background:var(--bg2);
+  border-bottom:1px solid #1e1208;
+  flex-shrink:0;
+  padding:8px 0 0;
+}
+.filter-scroll { display:flex; gap:6px; padding:0 12px 8px; overflow-x:auto; scroll-snap-type:x mandatory; -webkit-overflow-scrolling:touch; scrollbar-width:none; }
+.filter-scroll::-webkit-scrollbar { display:none; }
+.filter-chip { flex-shrink:0; padding:6px 14px; border-radius:20px; font-size:.75rem; letter-spacing:.05em; border:1px solid var(--bg4); background:transparent; color:var(--text3); cursor:pointer; scroll-snap-align:start; transition:all .15s; white-space:nowrap; }
+.filter-chip.active { border-color:var(--gold); background:#2d1f00; color:var(--gold3); }
+.search-row { padding:6px 12px 8px; }
+.search-input { width:100%; background:var(--bg3); border:1px solid var(--bg4); color:var(--text); padding:10px 14px; border-radius:var(--radius-sm); font-size:.9rem; outline:none; font-family:inherit; }
+.search-input::placeholder { color:var(--text4); }
+.search-input:focus { border-color:var(--gold); }
+
+/* ── WINE LIST ───────────────────────────────────────────────────── */
+.wine-list { flex:1; overflow-y:auto; -webkit-overflow-scrolling:touch; padding:8px 12px calc(80px + var(--safe-bottom)); }
+.group-label { font-size:.6rem; letter-spacing:.2em; text-transform:uppercase; color:var(--gold); padding:12px 4px 6px; border-bottom:1px solid #1e1208; margin-bottom:6px; }
+.group-count { color:var(--text4); }
+
+.wine-card {
+  background:var(--bg2);
+  border:1px solid #1e1208;
+  border-radius:var(--radius);
+  padding:14px;
+  margin-bottom:8px;
+  cursor:pointer;
+  transition:all .15s;
+  display:flex;
+  align-items:flex-start;
+  gap:12px;
+  position:relative;
+}
+.wine-card:active { background:var(--bg3); transform:scale(.98); }
+.wine-card-left { flex:1; min-width:0; }
+.wine-name { font-size:.95rem; font-weight:500; color:#f0e4cc; line-height:1.3; margin-bottom:2px; }
+.wine-region { font-size:.72rem; color:var(--text3); margin-bottom:6px; }
+.wine-meta { display:flex; flex-wrap:wrap; gap:4px; align-items:center; }
+.vintage-badge { font-size:.7rem; color:var(--text2); font-style:italic; }
+.loc-badges { display:flex; gap:3px; flex-wrap:wrap; }
+.loc-b { font-size:.58rem; padding:2px 6px; border-radius:4px; letter-spacing:.04em; }
+.loc-cellar { background:#2a1500; color:var(--cellar-t); border:1px solid #5a3010; }
+.loc-chiller { background:#001e22; color:var(--chiller-t); border:1px solid #0a5060; }
+.loc-apt { background:#130a22; color:var(--apt-t); border:1px solid #3a2060; }
+.wine-card-right { text-align:right; flex-shrink:0; }
+.optimal-year { font-size:1.4rem; font-weight:700; line-height:1; margin-bottom:4px; }
+.status-b { font-size:.55rem; letter-spacing:.08em; padding:2px 6px; border-radius:4px; display:inline-block; }
+.qty-info { font-size:.65rem; color:var(--text3); margin-top:4px; }
+
+/* ── FAB ─────────────────────────────────────────────────────────── */
+.fab {
+  position:fixed; bottom:calc(16px + var(--safe-bottom)); right:16px;
+  width:58px; height:58px; border-radius:50%;
+  background:linear-gradient(135deg,#c8821a,#a06010);
+  border:none; color:#fff; font-size:1.6rem; cursor:pointer;
+  box-shadow:0 4px 20px rgba(0,0,0,.5);
+  display:flex; align-items:center; justify-content:center;
+  z-index:50; transition:transform .15s;
+}
+.fab:active { transform:scale(.92); }
+.settings-btn {
+  position:fixed; bottom:calc(16px + var(--safe-bottom)); left:16px;
+  width:44px; height:44px; border-radius:50%;
+  background:var(--bg3); border:1px solid var(--bg4);
+  color:var(--text3); font-size:1.1rem; cursor:pointer;
+  display:flex; align-items:center; justify-content:center; z-index:50;
+}
+.settings-btn:active { background:var(--bg4); }
+
+/* ── SHEET (slide up modal) ──────────────────────────────────────── */
+.sheet-overlay { position:fixed; inset:0; background:rgba(0,0,0,0); z-index:200; pointer-events:none; transition:background .25s; }
+.sheet-overlay.open { background:rgba(0,0,0,.7); pointer-events:all; }
+.sheet { position:fixed; bottom:0; left:0; right:0; background:var(--bg2); border-radius:20px 20px 0 0; border-top:1px solid #3a2510; z-index:201; transform:translateY(100%); transition:transform .3s cubic-bezier(.32,.72,0,1); max-height:92vh; display:flex; flex-direction:column; }
+.sheet.open { transform:translateY(0); }
+.sheet-handle { width:36px; height:4px; background:var(--bg4); border-radius:2px; margin:10px auto 4px; flex-shrink:0; }
+.sheet-header { padding:8px 16px 12px; display:flex; align-items:center; gap:12px; flex-shrink:0; }
+.sheet-title { font-size:1.1rem; font-weight:400; color:#f5e6c8; flex:1; }
+.sheet-body { flex:1; overflow-y:auto; -webkit-overflow-scrolling:touch; padding:0 16px calc(20px + var(--safe-bottom)); }
+
+/* ── FORM ────────────────────────────────────────────────────────── */
+.form-field { margin-bottom:14px; }
+.form-label { font-size:.62rem; letter-spacing:.15em; text-transform:uppercase; color:var(--gold); display:block; margin-bottom:6px; }
+.form-input, .form-select, .form-textarea {
+  width:100%; background:var(--bg3); border:1px solid var(--bg4);
+  color:var(--text); padding:12px 14px; border-radius:var(--radius-sm);
+  font-size:.95rem; outline:none; font-family:inherit;
+  -webkit-appearance:none; appearance:none;
+}
+.form-input:focus, .form-select:focus, .form-textarea:focus { border-color:var(--gold); }
+.form-textarea { min-height:70px; resize:vertical; }
+.form-select { background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23806040' stroke-width='1.5' fill='none'/%3E%3C/svg%3E"); background-repeat:no-repeat; background-position:right 14px center; }
+.form-select option { background:#1e1509; }
+.form-row { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.loc-qty-grid { background:var(--bg3); border:1px solid var(--bg4); border-radius:var(--radius-sm); overflow:hidden; }
+.loc-qty-row { display:flex; align-items:center; padding:12px 14px; border-bottom:1px solid var(--bg4); }
+.loc-qty-row:last-child { border-bottom:none; }
+.loc-qty-label { flex:1; font-size:.85rem; }
+.loc-qty-controls { display:flex; align-items:center; gap:10px; }
+.qty-btn { width:32px; height:32px; border-radius:50%; background:var(--bg4); border:1px solid #3a2a15; color:var(--text); font-size:1.1rem; cursor:pointer; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+.qty-btn:active { background:#3a2d18; }
+.qty-num { min-width:24px; text-align:center; font-size:1rem; color:var(--gold3); font-weight:600; }
+.loc-total { font-size:.72rem; color:var(--text3); text-align:center; padding:8px; font-style:italic; }
+.btn-primary { width:100%; padding:15px; background:linear-gradient(135deg,#c8821a,#a06010); border:none; color:#fff; border-radius:var(--radius); font-size:1rem; cursor:pointer; font-family:inherit; letter-spacing:.05em; margin-top:4px; }
+.btn-primary:active { opacity:.85; }
+.btn-danger { width:100%; padding:12px; background:transparent; border:1px solid #7f1d1d; color:#fca5a5; border-radius:var(--radius); font-size:.85rem; cursor:pointer; font-family:inherit; margin-top:8px; }
+.btn-danger:active { background:#7f1d1d30; }
+.btn-secondary { width:100%; padding:12px; background:var(--bg3); border:1px solid var(--bg4); color:var(--text2); border-radius:var(--radius); font-size:.9rem; cursor:pointer; font-family:inherit; }
+.btn-secondary:active { background:var(--bg4); }
+
+/* ── ADD CHOICE SHEET ────────────────────────────────────────────── */
+.add-option { display:flex; align-items:center; gap:14px; padding:18px 0; border-bottom:1px solid var(--bg4); cursor:pointer; }
+.add-option:last-child { border-bottom:none; }
+.add-option:active { opacity:.7; }
+.add-icon { width:48px; height:48px; border-radius:14px; display:flex; align-items:center; justify-content:center; font-size:1.5rem; flex-shrink:0; }
+.add-option-text h3 { font-size:1rem; font-weight:500; color:var(--text); margin-bottom:2px; }
+.add-option-text p { font-size:.75rem; color:var(--text3); }
+
+/* ── SCAN SCREEN ─────────────────────────────────────────────────── */
+.scan-area { display:flex; flex-direction:column; align-items:center; justify-content:center; flex:1; gap:20px; padding:30px; text-align:center; }
+.scan-preview { width:100%; max-width:320px; border-radius:var(--radius); overflow:hidden; background:var(--bg3); border:2px dashed var(--bg4); min-height:200px; display:flex; align-items:center; justify-content:center; position:relative; }
+.scan-preview img { width:100%; border-radius:var(--radius); display:none; }
+.scan-placeholder { color:var(--text4); font-size:.85rem; padding:20px; }
+.scan-btn { display:flex; align-items:center; gap:8px; padding:14px 28px; background:linear-gradient(135deg,#c8821a,#a06010); border:none; color:#fff; border-radius:var(--radius); font-size:1rem; cursor:pointer; font-family:inherit; }
+.scan-btn:active { opacity:.8; }
+.analyzing-overlay { position:absolute; inset:0; background:rgba(0,0,0,.7); display:none; align-items:center; justify-content:center; border-radius:var(--radius); flex-direction:column; gap:10px; }
+.analyzing-overlay.show { display:flex; }
+.spinner { width:32px; height:32px; border:3px solid #3a2510; border-top-color:var(--gold); border-radius:50%; animation:spin .8s linear infinite; }
+@keyframes spin { to { transform:rotate(360deg); } }
+.analyzing-text { color:var(--text2); font-size:.85rem; }
+.scan-result { background:var(--bg3); border:1px solid #3a2510; border-radius:var(--radius); padding:14px; width:100%; max-width:320px; text-align:left; display:none; }
+.scan-result.show { display:block; }
+.scan-result h3 { font-size:.9rem; color:var(--gold2); margin-bottom:8px; }
+.scan-result-item { font-size:.8rem; color:var(--text2); margin-bottom:4px; }
+.scan-result-item span { color:var(--text); }
+
+/* ── SETTINGS SCREEN ─────────────────────────────────────────────── */
+.settings-list { padding:16px; }
+.settings-section { margin-bottom:24px; }
+.settings-section-label { font-size:.62rem; letter-spacing:.2em; text-transform:uppercase; color:var(--gold); margin-bottom:10px; display:block; }
+.settings-item { background:var(--bg2); border:1px solid #1e1208; border-radius:var(--radius); padding:14px; margin-bottom:8px; }
+.settings-item label { display:block; font-size:.72rem; color:var(--text3); margin-bottom:6px; letter-spacing:.08em; }
+.settings-item input { width:100%; background:var(--bg3); border:1px solid var(--bg4); color:var(--text); padding:10px 12px; border-radius:var(--radius-sm); font-size:.8rem; font-family:monospace; outline:none; }
+.settings-item input:focus { border-color:var(--gold); }
+.api-status { font-size:.7rem; margin-top:6px; }
+.api-status.ok { color:var(--green-t); }
+.api-status.err { color:var(--red-t); }
+.btn-save-settings { width:100%; padding:14px; background:linear-gradient(135deg,#c8821a,#a06010); border:none; color:#fff; border-radius:var(--radius); font-size:.95rem; cursor:pointer; font-family:inherit; }
+
+/* ── EMPTY STATE ─────────────────────────────────────────────────── */
+.empty-state { text-align:center; padding:60px 20px; color:var(--text3); }
+.empty-state .icon { font-size:3rem; margin-bottom:12px; }
+.empty-state p { font-size:.9rem; }
+
+/* ── UTILS ───────────────────────────────────────────────────────── */
+.back-btn { background:none; border:none; color:var(--gold2); font-size:1rem; cursor:pointer; padding:4px 0; font-family:inherit; display:flex; align-items:center; gap:4px; }
+.divider { height:1px; background:var(--bg4); margin:12px 0; }
+input[type=file] { display:none; }
+</style>
+</head>
+<body>
+
+<!-- ══ MAIN SCREEN ══════════════════════════════════════════════════ -->
+<div class="screen active" id="screen-main">
+  <div class="app-header">
+    <div class="subtitle">Wine Cellar</div>
+    <h1>My Collection</h1>
+    <div class="stats-row" id="stats-row"></div>
+  </div>
+  <div class="filter-bar">
+    <div class="filter-scroll" id="filter-chips"></div>
+    <div class="search-row">
+      <input class="search-input" id="search" placeholder="Search wine, region, vintage…" oninput="renderList()">
+    </div>
+  </div>
+  <div class="wine-list" id="wine-list"></div>
+  <button class="settings-btn" onclick="showSettings()">⚙</button>
+  <button class="fab" onclick="showAddChoice()">＋</button>
+</div>
+
+<!-- ══ SETTINGS SCREEN ══════════════════════════════════════════════ -->
+<div class="screen" id="screen-settings">
+  <div class="app-header" style="padding-bottom:16px">
+    <button class="back-btn" onclick="showMain()">‹ Back</button>
+    <h1 style="margin-top:4px">Settings</h1>
+  </div>
+  <div class="settings-list" style="flex:1;overflow-y:auto">
+    <div class="settings-section">
+      <span class="settings-section-label">Anthropic API Key</span>
+      <div class="settings-item">
+        <label>Paste your API key from console.anthropic.com</label>
+        <input type="password" id="api-key-input" placeholder="sk-ant-api03-…">
+        <div class="api-status" id="api-status"></div>
+      </div>
+      <button class="btn-save-settings" onclick="saveApiKey()">Save Key</button>
+    </div>
+    <div class="settings-section">
+      <span class="settings-section-label">Data</span>
+      <div class="settings-item">
+        <label>Export your cellar as CSV</label>
+        <button class="btn-secondary" onclick="exportCSV()" style="margin-top:6px">Export CSV</button>
+      </div>
+      <div class="settings-item">
+        <label>Total bottles in collection</label>
+        <div style="font-size:1.2rem;color:var(--gold3);font-weight:600;margin-top:4px" id="settings-total"></div>
+      </div>
+    </div>
+    <div class="settings-section">
+      <span class="settings-section-label">About</span>
+      <div class="settings-item" style="font-size:.78rem;color:var(--text3);line-height:1.6">
+        Photo scanning uses the Anthropic Claude API to read wine labels and suggest details. Your API key is stored locally on your device only. Data is saved in your browser's local storage.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ ADD CHOICE SHEET ══════════════════════════════════════════════ -->
+<div class="sheet-overlay" id="overlay-add" onclick="closeAddChoice()"></div>
+<div class="sheet" id="sheet-add">
+  <div class="sheet-handle"></div>
+  <div class="sheet-header">
+    <span class="sheet-title">Add Wine</span>
+    <button class="back-btn" onclick="closeAddChoice()">Cancel</button>
+  </div>
+  <div class="sheet-body">
+    <div class="add-option" onclick="startScan()">
+      <div class="add-icon" style="background:#2d1500">📷</div>
+      <div class="add-option-text">
+        <h3>Scan Label</h3>
+        <p>Take a photo — Claude reads the label automatically</p>
+      </div>
+    </div>
+    <div class="add-option" onclick="openAddManual()">
+      <div class="add-icon" style="background:#0a1a20">✏️</div>
+      <div class="add-option-text">
+        <h3>Enter Manually</h3>
+        <p>Type in the wine details yourself</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ SCAN SHEET ══════════════════════════════════════════════════ -->
+<div class="sheet-overlay" id="overlay-scan" onclick="closeScan()"></div>
+<div class="sheet" id="sheet-scan" style="max-height:95vh">
+  <div class="sheet-handle"></div>
+  <div class="sheet-header">
+    <span class="sheet-title">Scan Label</span>
+    <button class="back-btn" onclick="closeScan()">Cancel</button>
+  </div>
+  <div class="sheet-body">
+    <div class="scan-area">
+      <div class="scan-preview" id="scan-preview">
+        <span class="scan-placeholder">Take a photo of the wine label</span>
+        <img id="scan-img" alt="wine label">
+        <div class="analyzing-overlay" id="analyzing">
+          <div class="spinner"></div>
+          <div class="analyzing-text">Reading label…</div>
+        </div>
+      </div>
+      <button class="scan-btn" onclick="document.getElementById('camera-input').click()">
+        <span>📷</span> Take Photo
+      </button>
+      <input type="file" id="camera-input" accept="image/*" capture="environment" onchange="handlePhoto(event)">
+      <div class="scan-result" id="scan-result">
+        <h3>Detected Wine</h3>
+        <div class="scan-result-item">Name: <span id="sr-name">—</span></div>
+        <div class="scan-result-item">Region: <span id="sr-region">—</span></div>
+        <div class="scan-result-item">Vintage: <span id="sr-vintage">—</span></div>
+        <div class="scan-result-item">Category: <span id="sr-category">—</span></div>
+        <div class="scan-result-item">Suggested Peak: <span id="sr-optimal">—</span></div>
+        <button class="btn-primary" style="margin-top:12px" onclick="useScanResult()">Use This Info →</button>
+      </div>
+      <div id="scan-error" style="color:var(--red-t);font-size:.8rem;display:none;text-align:center"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ WINE FORM SHEET ══════════════════════════════════════════════ -->
+<div class="sheet-overlay" id="overlay-form" onclick=""></div>
+<div class="sheet" id="sheet-form" style="max-height:96vh">
+  <div class="sheet-handle"></div>
+  <div class="sheet-header">
+    <span class="sheet-title" id="form-title">Add Wine</span>
+    <button class="back-btn" onclick="closeForm()">Cancel</button>
+  </div>
+  <div class="sheet-body">
+    <div class="form-field">
+      <label class="form-label">Wine Name</label>
+      <input class="form-input" id="f-name" placeholder="e.g. Château Margaux" autocomplete="off">
+    </div>
+    <div class="form-field">
+      <label class="form-label">Region / Appellation</label>
+      <input class="form-input" id="f-region" placeholder="e.g. Margaux, Bordeaux" autocomplete="off">
+    </div>
+    <div class="form-row">
+      <div class="form-field">
+        <label class="form-label">Vintage</label>
+        <input class="form-input" id="f-vintage" placeholder="2019 or NV" autocomplete="off">
+      </div>
+      <div class="form-field">
+        <label class="form-label">Category</label>
+        <select class="form-select" id="f-category">
+          <option>Virginia</option><option>Bordeaux</option><option>Italian</option>
+          <option>Italian White</option><option>Rhône</option><option>US Red</option>
+          <option>Spanish</option><option>South American</option><option>South African</option>
+          <option>German White</option><option>Sauternes</option><option>Port</option><option>Other</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-field">
+        <label class="form-label">Drink Window</label>
+        <input class="form-input" id="f-window" placeholder="2028–2036" autocomplete="off">
+      </div>
+      <div class="form-field">
+        <label class="form-label">Optimal Year</label>
+        <input class="form-input" type="number" id="f-optimal" placeholder="2032">
+      </div>
+    </div>
+    <div class="form-field">
+      <label class="form-label">Bottles by Location</label>
+      <div class="loc-qty-grid">
+        <div class="loc-qty-row">
+          <span class="loc-qty-label" style="color:var(--cellar-t)">🍷 Wine Cellar</span>
+          <div class="loc-qty-controls">
+            <button class="qty-btn" onclick="adjQty(0,-1)">−</button>
+            <span class="qty-num" id="q0">0</span>
+            <button class="qty-btn" onclick="adjQty(0,1)">＋</button>
+          </div>
+        </div>
+        <div class="loc-qty-row">
+          <span class="loc-qty-label" style="color:var(--chiller-t)">❄ Basement Chiller</span>
+          <div class="loc-qty-controls">
+            <button class="qty-btn" onclick="adjQty(1,-1)">−</button>
+            <span class="qty-num" id="q1">0</span>
+            <button class="qty-btn" onclick="adjQty(1,1)">＋</button>
+          </div>
+        </div>
+        <div class="loc-qty-row">
+          <span class="loc-qty-label" style="color:var(--apt-t)">🏠 Apartment</span>
+          <div class="loc-qty-controls">
+            <button class="qty-btn" onclick="adjQty(2,-1)">−</button>
+            <span class="qty-num" id="q2">0</span>
+            <button class="qty-btn" onclick="adjQty(2,1)">＋</button>
+          </div>
+        </div>
+        <div class="loc-total" id="loc-total">0 bottles total</div>
+      </div>
+    </div>
+    <div class="form-field">
+      <label class="form-label">Notes</label>
+      <textarea class="form-textarea" id="f-note" placeholder="Tasting notes, food pairings, etc."></textarea>
+    </div>
+    <button class="btn-primary" onclick="saveWine()">Save Wine</button>
+    <button class="btn-danger" id="btn-delete" onclick="deleteWine()" style="display:none">Delete Wine</button>
+    <div style="height:20px"></div>
+  </div>
+</div>
+
+<script>
+// ── DATA ─────────────────────────────────────────────────────────────
+const LOCS = ['Wine Cellar','Basement Chiller','Apartment'];
+const GROUPS = [
+  {l:'Open Now / Very Soon (2026–2027)', t:o=>o<=2027},
+  {l:'Drink Within 3 Years (2028–2029)', t:o=>o>=2028&&o<=2029},
+  {l:'Medium Term (2030–2031)',           t:o=>o>=2030&&o<=2031},
+  {l:'Long Hold (2032–2034)',             t:o=>o>=2032&&o<=2034},
+  {l:'Extended Cellar (2035+)',           t:o=>o>=2035},
+];
+const FILTER_TABS = ['All','🍷 Cellar','❄ Chiller','🏠 Apartment','─','Virginia','Bordeaux','Italian','Italian White','Rhône','US Red','Spanish','South American','South African','German White','Sauternes','Port','Other'];
+
+const DEFAULT_WINES = [
+  {id:1,name:"Quinta das Carvalhas 20yr Tawny",region:"Douro, Portugal",vintage:"NV",locations:{"Wine Cellar":1,"Basement Chiller":1,"Apartment":0},window:"Now",optimal:2026,category:"Port",note:"Ready on release. Refrigerate after opening."},
+  {id:2,name:"Terralsole Trio Super Tuscan",region:"Tuscany, Italy",vintage:"2011",locations:{"Wine Cellar":1,"Basement Chiller":1,"Apartment":0},window:"Now–2027",optimal:2026,category:"Italian",note:"14 years old — open within 1–2 years."},
+  {id:3,name:"Breaux Cabernet Franc",region:"Virginia",vintage:"2019",locations:{"Wine Cellar":0,"Basement Chiller":0,"Apartment":2},window:"2025–2032",optimal:2026,category:"Virginia",note:"Two bottles at apartment. Drink soon."},
+  {id:4,name:"Pieropan Soave Classico",region:"Veneto, Italy",vintage:"Current",locations:{"Wine Cellar":0,"Basement Chiller":1,"Apartment":0},window:"Now–2028",optimal:2027,category:"Italian White",note:"Top Soave producer. Drink while fresh."},
+  {id:5,name:"Cooper's Hawk Lux Pinot Noir",region:"California",vintage:"Current",locations:{"Wine Cellar":0,"Basement Chiller":0,"Apartment":4},window:"Now–2028",optimal:2027,category:"US Red",note:"Wine club tier. Fruit-forward, drink while vibrant."},
+  {id:6,name:"Cooper's Hawk Global Cuvée",region:"California",vintage:"Current",locations:{"Wine Cellar":0,"Basement Chiller":0,"Apartment":1},window:"Now–2028",optimal:2027,category:"US Red",note:"Accessible red blend. Not built for extended cellaring."},
+  {id:7,name:"Vinsacro Dioro",region:"Rioja, Spain",vintage:"2019",locations:{"Wine Cellar":2,"Basement Chiller":0,"Apartment":0},window:"2022–2032",optimal:2027,category:"Spanish",note:"Drinking well now. Don't delay much longer."},
+  {id:8,name:"Quinta das Carvalhas LBV Port",region:"Douro, Portugal",vintage:"2018",locations:{"Wine Cellar":0,"Basement Chiller":1,"Apartment":0},window:"Now–2030",optimal:2027,category:"Port",note:"No need to wait long."},
+  {id:9,name:"Erba Proprietary Red",region:"Napa, CA",vintage:"2014",locations:{"Wine Cellar":0,"Basement Chiller":1,"Apartment":0},window:"Now–2029",optimal:2027,category:"US Red",note:"12 years old — check soon."},
+  {id:10,name:"A to Z Pinot Noir",region:"Oregon",vintage:"Current",locations:{"Wine Cellar":0,"Basement Chiller":1,"Apartment":1},window:"Now–2029",optimal:2027,category:"US Red",note:"Entry-level Oregon Pinot. Drink within 3–5 years of vintage."},
+  {id:11,name:"Breaux 'The Quarter'",region:"Virginia",vintage:"2022",locations:{"Wine Cellar":1,"Basement Chiller":0,"Apartment":0},window:"2025–2029",optimal:2027,category:"Virginia",note:"Entry-level blend. Drink first among Virginia reds."},
+  {id:12,name:"Breaux Meritage",region:"Virginia",vintage:"2020",locations:{"Wine Cellar":1,"Basement Chiller":0,"Apartment":0},window:"2026–2030",optimal:2027,category:"Virginia",note:"Gold at 2025 Governor's Cup."},
+  {id:13,name:"LAN Gran Reserva",region:"Rioja, Spain",vintage:"2017",locations:{"Wine Cellar":0,"Basement Chiller":0,"Apartment":1},window:"Now–2032",optimal:2027,category:"Spanish",note:"Already pre-aged. In its window now."},
+  {id:14,name:"Marqués de Riscal Reserva",region:"Rioja, Spain",vintage:"2022",locations:{"Wine Cellar":1,"Basement Chiller":0,"Apartment":0},window:"2026–2029",optimal:2027,category:"Spanish",note:"24 months American oak."},
+  {id:15,name:"Educated Guess Cab Sauv",region:"Napa County, CA",vintage:"2023",locations:{"Wine Cellar":0,"Basement Chiller":0,"Apartment":1},window:"Now–2028",optimal:2027,category:"US Red",note:"Tuesday night wine. Drink up."},
+  {id:16,name:"Ruffino Chianti Riserva Ducale Tan",region:"Tuscany, Italy",vintage:"2021",locations:{"Wine Cellar":2,"Basement Chiller":0,"Apartment":0},window:"2024–2031",optimal:2028,category:"Italian",note:"Classic Tan label Riserva. Best 3–5 years from vintage."},
+  {id:17,name:"Catena Malbec High Mountain Vines",region:"Mendoza, Argentina",vintage:"2022",locations:{"Wine Cellar":2,"Basement Chiller":1,"Apartment":0},window:"2026–2030",optimal:2028,category:"South American",note:"High altitude Andes fruit."},
+  {id:18,name:"Heitz Cellar Cab Sauv",region:"Napa Valley, CA",vintage:"2019",locations:{"Wine Cellar":1,"Basement Chiller":0,"Apartment":0},window:"2025–2035",optimal:2028,category:"US Red",note:"First vintage post-sale. Transitional style."},
+  {id:19,name:"Maria's Legacy Cab",region:"California",vintage:"2022",locations:{"Wine Cellar":0,"Basement Chiller":1,"Apartment":0},window:"2025–2033",optimal:2028,category:"US Red",note:"Drink-friendly style, best in 2–4 years."},
+  {id:20,name:"Ch Tronquoy Lalande",region:"St-Estèphe, Bordeaux",vintage:"2015",locations:{"Wine Cellar":1,"Basement Chiller":0,"Apartment":0},window:"Now–2030",optimal:2028,category:"Bordeaux",note:"Outstanding 2015 vintage. In window now."},
+  {id:21,name:"Spier 21 Gables Cab",region:"Stellenbosch, South Africa",vintage:"2020",locations:{"Wine Cellar":1,"Basement Chiller":0,"Apartment":0},window:"2024–2033",optimal:2028,category:"South African",note:"Solid structure, not a 20-year wine."},
+  {id:22,name:"Fifty-Third Norton Extended Barrel Aged",region:"Virginia",vintage:"2020",locations:{"Wine Cellar":1,"Basement Chiller":0,"Apartment":0},window:"2027–2033",optimal:2029,category:"Virginia",note:"Norton peaks 8–10 years from vintage."},
+  {id:23,name:"Barboursville Octagon",region:"Virginia",vintage:"2021",locations:{"Wine Cellar":4,"Basement Chiller":0,"Apartment":0},window:"2027–2033",optimal:2029,category:"Virginia",note:"Virginia's most acclaimed red. 92pts WE."},
+  {id:24,name:"Kalero Vineyard Cab Franc",region:"Loudoun County, VA",vintage:"2023",locations:{"Wine Cellar":0,"Basement Chiller":1,"Apartment":0},window:"2026–2032",optimal:2029,category:"Virginia",note:"Silver at 2024 Loudoun Wine Awards."},
+  {id:25,name:"868 Estate Cab Franc",region:"Loudoun County, VA",vintage:"2023",locations:{"Wine Cellar":1,"Basement Chiller":0,"Apartment":0},window:"2026–2032",optimal:2029,category:"Virginia",note:"Award-winning Loudoun Cab Franc."},
+  {id:26,name:"The Barns Hamilton Station Cab Franc",region:"Virginia",vintage:"2023",locations:{"Wine Cellar":1,"Basement Chiller":1,"Apartment":0},window:"2026–2032",optimal:2029,category:"Virginia",note:"Decant 45 mins when opening."},
+  {id:27,name:"Cana Le Mariage",region:"Middleburg, Virginia",vintage:"2019",locations:{"Wine Cellar":1,"Basement Chiller":0,"Apartment":0},window:"2026–2034",optimal:2029,category:"Virginia",note:"Gold 2022 Governor's Cup. Best Virginia bottle."},
+  {id:28,name:"Lost Mountain Rendezvous",region:"Virginia",vintage:"2023",locations:{"Wine Cellar":3,"Basement Chiller":0,"Apartment":0},window:"2026–2031",optimal:2029,category:"Virginia",note:"Approachable Virginia blend."},
+  {id:29,name:"Mascota Unanime Signature",region:"Mendoza, Argentina",vintage:"2019",locations:{"Wine Cellar":1,"Basement Chiller":0,"Apartment":0},window:"2023–2035",optimal:2029,category:"South American",note:"6 years old — nicely on track."},
+  {id:30,name:"Dr. Loosen Blue Slate Kabinett",region:"Mosel, Germany",vintage:"2025",locations:{"Wine Cellar":1,"Basement Chiller":0,"Apartment":0},window:"2026–2035",optimal:2030,category:"German White",note:"Brand new — will develop beautifully over 4–6 years."},
+  {id:31,name:"Good Spirit Farm Cab Franc Reserve",region:"Loudoun County, VA",vintage:"2022",locations:{"Wine Cellar":1,"Basement Chiller":0,"Apartment":0},window:"2027–2033",optimal:2030,category:"Virginia",note:"Award-winning Reserve. Hold 2+ more years."},
+  {id:32,name:"Ch Quinault L'Enclos",region:"St-Émilion Grand Cru Classé",vintage:"2018",locations:{"Wine Cellar":2,"Basement Chiller":0,"Apartment":0},window:"2023–2036",optimal:2030,category:"Bordeaux",note:"Merlot-dominant. More approachable than Médoc."},
+  {id:33,name:"Ch Labégorce",region:"Margaux, Bordeaux",vintage:"2018",locations:{"Wine Cellar":2,"Basement Chiller":0,"Apartment":0},window:"2024–2038",optimal:2030,category:"Bordeaux",note:"Legendary 2018 vintage. Patience rewarded."},
+  {id:34,name:"Ch Cantemerle",region:"Haut-Médoc Grand Cru Classé",vintage:"2016",locations:{"Wine Cellar":1,"Basement Chiller":0,"Apartment":0},window:"2026–2034",optimal:2030,category:"Bordeaux",note:"5th Growth in excellent vintage. Great value."},
+  {id:35,name:"Chrysalis Norton Barrel Select",region:"Virginia",vintage:"2022",locations:{"Wine Cellar":4,"Basement Chiller":0,"Apartment":0},window:"2027–2033",optimal:2030,category:"Virginia",note:"Below Locksley Reserve tier."},
+  {id:36,name:"Hillsborough Petit Verdot Vintners Selection",region:"Virginia",vintage:"2022",locations:{"Wine Cellar":2,"Basement Chiller":0,"Apartment":0},window:"2027–2033",optimal:2030,category:"Virginia",note:"Gold at 2025 Governor's Cup."},
+  {id:37,name:"Covalli Barbaresco",region:"Piedmont, Italy",vintage:"2020",locations:{"Wine Cellar":1,"Basement Chiller":0,"Apartment":0},window:"2026–2034",optimal:2030,category:"Italian",note:"92pts Suckling. Barbaresco before Barolo."},
+  {id:38,name:"Clos des Confidences",region:"St-Émilion Grand Cru",vintage:"2020",locations:{"Wine Cellar":1,"Basement Chiller":0,"Apartment":0},window:"2027–2034",optimal:2030,category:"Bordeaux",note:"Cyril Gouy. Excellent 2020 Right Bank."},
+  {id:39,name:"Jordan Cab Sauv",region:"Alexander Valley, CA",vintage:"2021",locations:{"Wine Cellar":2,"Basement Chiller":0,"Apartment":0},window:"2027–2034",optimal:2030,category:"US Red",note:"Elegant, Bordeaux-style Sonoma Cab."},
+  {id:40,name:"The Barns Hamilton Station Meritage",region:"Virginia",vintage:"2023",locations:{"Wine Cellar":1,"Basement Chiller":0,"Apartment":0},window:"2027–2033",optimal:2030,category:"Virginia",note:"Well-regarded Loudoun producer."},
+  {id:41,name:"Courtney Benham Reserve Napa",region:"Napa Valley, CA",vintage:"2022",locations:{"Wine Cellar":1,"Basement Chiller":0,"Apartment":0},window:"2025–2035",optimal:2030,category:"US Red",note:"24.6 Brix, pH 3.65. 95 barrels. Hold 2–3 more years."},
+  {id:42,name:"Ch Lamarque",region:"Haut-Médoc, Bordeaux",vintage:"2022",locations:{"Wine Cellar":1,"Basement Chiller":0,"Apartment":0},window:"2028–2034",optimal:2031,category:"Bordeaux",note:"Consistent Cru Bourgeois."},
+  {id:43,name:"Halos de Jupiter CDP",region:"Châteauneuf-du-Pape",vintage:"2022",locations:{"Wine Cellar":1,"Basement Chiller":0,"Apartment":0},window:"2028–2035",optimal:2031,category:"Rhône",note:"93pts on label. Good 2022 vintage."},
+  {id:44,name:"Ch Fleur Cardinale",region:"St-Émilion Grand Cru Classé",vintage:"2020",locations:{"Wine Cellar":1,"Basement Chiller":0,"Apartment":0},window:"2028–2035",optimal:2031,category:"Bordeaux",note:"Excellent 2020 Right Bank vintage."},
+  {id:45,name:"Renieri Chianti Classico Gran Selezione",region:"Tuscany, Italy",vintage:"2022",locations:{"Wine Cellar":1,"Basement Chiller":0,"Apartment":0},window:"2028–2035",optimal:2031,category:"Italian",note:"94pts Suckling. Top tier Chianti."},
+  {id:46,name:"St Giorgio Brunello di Montalcino",region:"Tuscany, Italy",vintage:"2020",locations:{"Wine Cellar":1,"Basement Chiller":0,"Apartment":0},window:"2028–2036",optimal:2031,category:"Italian",note:"Good value Brunello entry point."},
+  {id:47,name:"La Petite Tour CDP",region:"Châteauneuf-du-Pape",vintage:"2023",locations:{"Wine Cellar":1,"Basement Chiller":1,"Apartment":0},window:"2027–2035",optimal:2031,category:"Rhône",note:"92pts Wegmans rated. Great value CDP."},
+  {id:48,name:"The Barns Hamilton Station Petit Verdot",region:"Virginia",vintage:"2023",locations:{"Wine Cellar":1,"Basement Chiller":0,"Apartment":0},window:"2027–2034",optimal:2031,category:"Virginia",note:"Virginia does Petit Verdot exceptionally well."},
+  {id:49,name:"868 Estate Meritage",region:"Virginia",vintage:"2023",locations:{"Wine Cellar":1,"Basement Chiller":0,"Apartment":0},window:"2028–2034",optimal:2031,category:"Virginia",note:"Gold at 2025 Governor's Cup."},
+  {id:50,name:"Hillsborough Ruby",region:"Virginia",vintage:"2022",locations:{"Wine Cellar":1,"Basement Chiller":0,"Apartment":0},window:"2027–2035",optimal:2031,category:"Virginia",note:"Tannat, Fer Servadou, Petit Verdot. 24mo French oak."},
+  {id:51,name:"Ch Belgrave",region:"Haut-Médoc Grand Cru Classé",vintage:"2019",locations:{"Wine Cellar":1,"Basement Chiller":0,"Apartment":0},window:"2027–2039",optimal:2032,category:"Bordeaux",note:"5th Growth. Outstanding 2019 vintage."},
+  {id:52,name:"Covalli Barolo",region:"Piedmont, Italy",vintage:"2019",locations:{"Wine Cellar":2,"Basement Chiller":0,"Apartment":0},window:"2028–2038",optimal:2032,category:"Italian",note:"Commercial style but solid 2019 structure."},
+  {id:53,name:"Mauro Veglio Barolo Gattera",region:"La Morra, Piedmont",vintage:"2020",locations:{"Wine Cellar":1,"Basement Chiller":0,"Apartment":0},window:"2028–2037",optimal:2032,category:"Italian",note:"Respected La Morra cru. Modern style."},
+  {id:54,name:"Paola Lanzavecchia Calice Barolo 2016",region:"Piedmont, Italy",vintage:"2016",locations:{"Wine Cellar":2,"Basement Chiller":0,"Apartment":0},window:"2026–2038",optimal:2032,category:"Italian",note:"Legendary 2016 vintage. Two bottles — compare side by side."},
+  {id:55,name:"Paola Lanzavecchia Calice Barolo 2020",region:"Piedmont, Italy",vintage:"2020",locations:{"Wine Cellar":1,"Basement Chiller":0,"Apartment":0},window:"2028–2037",optimal:2032,category:"Italian",note:"Compare against the 2016 when both hit 2032."},
+  {id:56,name:"Chrysalis Norton Locksley Reserve",region:"Virginia",vintage:"2021",locations:{"Wine Cellar":4,"Basement Chiller":0,"Apartment":0},window:"2028–2036",optimal:2032,category:"Virginia",note:"Best Norton at 2026 Governor's Cup. Flagship Virginia bottle."},
+  {id:57,name:"Martin Ray Santa Cruz Mtns Cab",region:"Santa Cruz Mountains, CA",vintage:"2022",locations:{"Wine Cellar":1,"Basement Chiller":0,"Apartment":0},window:"2027–2040",optimal:2032,category:"US Red",note:"Don't touch for 3+ more years."},
+  {id:58,name:"Canvasback Red Mountain Cab",region:"Red Mountain, WA",vintage:"2022",locations:{"Wine Cellar":2,"Basement Chiller":1,"Apartment":0},window:"2026–2040",optimal:2032,category:"US Red",note:"Red Mountain structure needs serious time."},
+  {id:59,name:"Ch Suduiraut Sauternes",region:"Sauternes, Bordeaux",vintage:"2016",locations:{"Wine Cellar":0,"Basement Chiller":1,"Apartment":0},window:"2022–2045",optimal:2032,category:"Sauternes",note:"Very good Sauternes vintage."},
+  {id:60,name:"Ch La Confession",region:"St-Émilion Grand Cru",vintage:"2020",locations:{"Wine Cellar":1,"Basement Chiller":0,"Apartment":0},window:"2028–2042",optimal:2033,category:"Bordeaux",note:"7–9 years minimum. Among best cellar wines."},
+  {id:61,name:"Ch Tronquoy",region:"St-Estèphe, Bordeaux",vintage:"2022",locations:{"Wine Cellar":1,"Basement Chiller":0,"Apartment":0},window:"2029–2038",optimal:2033,category:"Bordeaux",note:"Very young. St-Estèphe needs time."},
+  {id:62,name:"Ch Canon La Gaffelière",region:"St-Émilion Premier Grand Cru Classé",vintage:"2019",locations:{"Wine Cellar":1,"Basement Chiller":0,"Apartment":0},window:"2028–2040",optimal:2034,category:"Bordeaux",note:"Crown jewel of the collection. Comtes von Neipperg."},
+  {id:63,name:"Massolino Barolo Serralunga",region:"Serralunga d'Alba, Piedmont",vintage:"2019",locations:{"Wine Cellar":2,"Basement Chiller":0,"Apartment":0},window:"2028–2040",optimal:2034,category:"Italian",note:"Most structured Barolo in the cellar. Serralunga doesn't rush."},
+  {id:64,name:"Hillsborough Ruby Nights",region:"Virginia",vintage:"2023",locations:{"Wine Cellar":3,"Basement Chiller":0,"Apartment":0},window:"2030–2040",optimal:2034,category:"Virginia",note:"20th Anniversary Reserve. 30yr potential. Don't open before 2030."},
+  {id:65,name:"Breaux Nebbiolo",region:"Virginia",vintage:"2019",locations:{"Wine Cellar":3,"Basement Chiller":0,"Apartment":0},window:"2027–2039",optimal:2035,category:"Virginia",note:"2010 bottle confirmed still stunning at 16 years."},
+  {id:66,name:"Chrysalis Hollin Reserve Nebbiolo",region:"Virginia",vintage:"2020",locations:{"Wine Cellar":3,"Basement Chiller":1,"Apartment":0},window:"2029–2038",optimal:2035,category:"Virginia",note:"Single vineyard. Virginia Nebbiolo surprises."},
+  {id:67,name:"Ch Lafaurie-Peyraguey Sauternes",region:"Sauternes, Bordeaux",vintage:"2018",locations:{"Wine Cellar":0,"Basement Chiller":1,"Apartment":0},window:"2024–2050",optimal:2035,category:"Sauternes",note:"More powerful than Suduiraut — give it more time."},
+  {id:68,name:"Dr. Loosen Erdener Treppchen Auslese",region:"Mosel, Germany",vintage:"2020",locations:{"Wine Cellar":0,"Basement Chiller":3,"Apartment":0},window:"2025–2055",optimal:2036,category:"German White",note:"Just entering its window. Built for decades."},
+  {id:69,name:"Breaux Nebbiolo",region:"Virginia",vintage:"2020",locations:{"Wine Cellar":1,"Basement Chiller":0,"Apartment":0},window:"2028–2040",optimal:2036,category:"Virginia",note:"16-year aging curve confirmed. Longest-hold Virginia red."},
+];
+
+// ── STATE ───────────────────────────────────────────────────────────
+let wines = [], filterMode = 'All', editId = null, nextId = 200;
+let scanData = null;
+
+function totalQty(w){ return LOCS.reduce((s,l)=>s+(w.locations[l]||0),0); }
+
+// Safe localStorage wrappers — iOS Safari on file:// can throw
+function lsGet(key){ try{ return localStorage.getItem(key); }catch(e){ return null; } }
+function lsSet(key,val){ try{ localStorage.setItem(key,val); }catch(e){} }
+
+function load(){
+  try {
+    const saved = lsGet('cellar_mobile_v1');
+    if(saved){
+      const parsed = JSON.parse(saved);
+      if(Array.isArray(parsed) && parsed.length > 0){
+        wines = parsed;
+        nextId = Math.max(...wines.map(w=>w.id), 199) + 1;
+      } else {
+        throw new Error('empty');
+      }
+    } else {
+      throw new Error('no data');
+    }
+  } catch(e) {
+    // Fall back to defaults every time if storage fails or is empty
+    wines = DEFAULT_WINES.map(w=>({...w, locations:{...w.locations}}));
+    nextId = 200;
+    save();
+  }
+  try {
+    const k = lsGet('cellar_api_key');
+    if(k){ document.getElementById('api-key-input').value = k; showApiStatus('Key saved ✓','ok'); }
+  } catch(e) {}
+}
+function save(){ lsSet('cellar_mobile_v1', JSON.stringify(wines)); }
+
+function status(o){
+  const y = o - 2026;
+  if(y<=1) return{bg:'var(--red)',t:'var(--red-t)',l:'OPEN NOW'};
+  if(y<=3) return{bg:'var(--orange)',t:'var(--orange-t)',l:'DRINK SOON'};
+  if(y<=6) return{bg:'var(--amber)',t:'var(--amber-t)',l:'APPROACHING'};
+  if(y<=9) return{bg:'var(--green)',t:'var(--green-t)',l:'HOLD'};
+  return{bg:'var(--blue)',t:'var(--blue-t)',l:'CELLAR'};
+}
+
+// ── RENDER ──────────────────────────────────────────────────────────
+function renderStats(){
+  const total = wines.reduce((s,w)=>s+totalQty(w),0);
+  const byLoc = LOCS.map(l=>({l, n:wines.reduce((s,w)=>s+(w.locations[l]||0),0)}));
+  document.getElementById('stats-row').innerHTML =
+    `<div class="stat-chip"><strong>${total}</strong> bottles</div>` +
+    byLoc.filter(x=>x.n>0).map(x=>`<div class="stat-chip"><strong>${x.n}</strong> ${x.l.split(' ')[0]}</div>`).join('');
+  document.getElementById('settings-total').textContent = `${total} bottles`;
+}
+
+function renderFilters(){
+  document.getElementById('filter-chips').innerHTML = FILTER_TABS.map(t=>{
+    if(t==='─') return '';
+    const active = filterMode===t || (filterMode==='🍷 Cellar' && t==='🍷 Cellar');
+    return `<button class="filter-chip${filterMode===t?' active':''}" onclick="setFilter('${t}')">${t}</button>`;
+  }).join('');
+}
+
+function filteredWines(){
+  const q = (document.getElementById('search')?.value||'').toLowerCase();
+  const locMap = {'🍷 Cellar':'Wine Cellar','❄ Chiller':'Basement Chiller','🏠 Apartment':'Apartment'};
+  return wines.filter(w=>{
+    if(filterMode==='All') return totalQty(w)>0;
+    const loc = locMap[filterMode];
+    if(loc) return (w.locations[loc]||0)>0;
+    return w.category===filterMode;
+  }).filter(w=>!q||w.name.toLowerCase().includes(q)||w.region.toLowerCase().includes(q)||String(w.vintage).includes(q))
+    .sort((a,b)=>a.optimal-b.optimal);
+}
+
+function renderList(){
+  renderFilters();
+  renderStats();
+  const data = filteredWines();
+  const list = document.getElementById('wine-list');
+  if(!data.length){ list.innerHTML=`<div class="empty-state"><div class="icon">🍷</div><p>No wines match your search</p></div>`; return; }
+  let html = '';
+  GROUPS.forEach(g=>{
+    const gr = data.filter(w=>g.t(w.optimal));
+    if(!gr.length) return;
+    html += `<div class="group-label">${g.l} <span class="group-count">· ${gr.reduce((s,w)=>s+totalQty(w),0)} bottles</span></div>`;
+    gr.forEach(w=>{
+      const s = status(w.optimal);
+      const qty = totalQty(w);
+      const locs = LOCS.map(l=>{
+        const n = w.locations[l]||0;
+        if(!n) return '';
+        const cls = l==='Wine Cellar'?'loc-cellar':l==='Basement Chiller'?'loc-chiller':'loc-apt';
+        return `<span class="loc-b ${cls}">${l.split(' ')[0]}${n>1?` ×${n}`:''}</span>`;
+      }).join('');
+      html += `<div class="wine-card" onclick="openEdit(${w.id})">
+        <div class="wine-card-left">
+          <div class="wine-name">${w.name}</div>
+          <div class="wine-region">${w.region}</div>
+          <div class="wine-meta">
+            <span class="vintage-badge">${w.vintage}</span>
+            <div class="loc-badges">${locs}</div>
+          </div>
+        </div>
+        <div class="wine-card-right">
+          <div class="optimal-year" style="color:${s.t}">${w.optimal}</div>
+          <div class="status-b" style="background:${s.bg}20;color:${s.t};border:1px solid ${s.t}30">${s.l}</div>
+          ${qty>1?`<div class="qty-info">×${qty} bottles</div>`:''}
+        </div>
+      </div>`;
+    });
+  });
+  list.innerHTML = html;
+}
+
+function setFilter(f){ filterMode=f; renderList(); }
+
+// ── NAVIGATION ──────────────────────────────────────────────────────
+function showMain(){ document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active')); document.getElementById('screen-main').classList.add('active'); renderList(); }
+function showSettings(){ document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active')); document.getElementById('screen-settings').classList.add('active'); }
+
+// ── SHEETS ──────────────────────────────────────────────────────────
+function openSheet(id){ document.getElementById('overlay-'+id).classList.add('open'); document.getElementById('sheet-'+id).classList.add('open'); }
+function closeSheet(id){ document.getElementById('overlay-'+id).classList.remove('open'); document.getElementById('sheet-'+id).classList.remove('open'); }
+
+function showAddChoice(){ openSheet('add'); }
+function closeAddChoice(){ closeSheet('add'); }
+
+// ── SCAN ────────────────────────────────────────────────────────────
+function startScan(){
+  closeAddChoice();
+  document.getElementById('scan-result').classList.remove('show');
+  document.getElementById('scan-error').style.display='none';
+  document.getElementById('scan-img').style.display='none';
+  document.getElementById('scan-preview').querySelector('.scan-placeholder').style.display='flex';
+  scanData = null;
+  openSheet('scan');
+}
+function closeScan(){ closeSheet('scan'); }
+
+async function handlePhoto(event){
+  const file = event.target.files[0];
+  if(!file) return;
+  const apiKey = lsGet('cellar_api_key');
+  if(!apiKey){ showScanError('No API key set. Go to Settings ⚙ to add your Anthropic API key.'); return; }
+  const reader = new FileReader();
+  reader.onload = async(e) => {
+    const b64 = e.target.result.split(',')[1];
+    const mediaType = file.type || 'image/jpeg';
+    const img = document.getElementById('scan-img');
+    img.src = e.target.result;
+    img.style.display='block';
+    document.getElementById('scan-preview').querySelector('.scan-placeholder').style.display='none';
+    const overlay = document.getElementById('analyzing');
+    overlay.classList.add('show');
+    document.getElementById('scan-error').style.display='none';
+    document.getElementById('scan-result').classList.remove('show');
+    try {
+      const resp = await fetch('https://api.anthropic.com/v1/messages',{
+        method:'POST',
+        headers:{
+          'Content-Type':'application/json',
+          'x-api-key':apiKey,
+          'anthropic-version':'2023-06-01',
+          'anthropic-dangerous-direct-browser-access':'true'
+        },
+        body:JSON.stringify({
+          model:'claude-sonnet-4-20250514',
+          max_tokens:600,
+          messages:[{role:'user',content:[
+            {type:'image',source:{type:'base64',media_type:mediaType,data:b64}},
+            {type:'text',text:`Analyze this wine bottle label. Return ONLY a JSON object with these exact fields:
+{
+  "name": "wine name without vintage year",
+  "region": "appellation or region and country",
+  "vintage": "year as 4-digit string, or NV if non-vintage, or Current if unclear",
+  "category": "one of: Virginia, Bordeaux, Italian, Italian White, Rhône, US Red, Spanish, South American, South African, German White, Sauternes, Port, Other",
+  "suggestedOptimal": year as integer for suggested optimal drinking year based on wine style and vintage,
+  "window": "suggested drinking window like 2028–2035"
+}
+Return ONLY the JSON, no markdown, no explanation.`}
+          ]}]
+        })
+      });
+      const data = await resp.json();
+      overlay.classList.remove('show');
+      if(data.error){ showScanError('API error: '+data.error.message); return; }
+      const text = data.content[0].text.trim();
+      const clean = text.replace(/```json|```/g,'').trim();
+      const parsed = JSON.parse(clean);
+      scanData = parsed;
+      document.getElementById('sr-name').textContent = parsed.name || '—';
+      document.getElementById('sr-region').textContent = parsed.region || '—';
+      document.getElementById('sr-vintage').textContent = parsed.vintage || '—';
+      document.getElementById('sr-category').textContent = parsed.category || '—';
+      document.getElementById('sr-optimal').textContent = parsed.suggestedOptimal || '—';
+      document.getElementById('scan-result').classList.add('show');
+    } catch(err){
+      overlay.classList.remove('show');
+      showScanError('Error reading label: '+err.message);
+    }
+  };
+  reader.readAsDataURL(file);
+  event.target.value='';
+}
+
+function showScanError(msg){ const el=document.getElementById('scan-error'); el.textContent=msg; el.style.display='block'; }
+
+function useScanResult(){
+  if(!scanData) return;
+  closeSheet('scan');
+  openAddManual(scanData);
+}
+
+// ── FORM ────────────────────────────────────────────────────────────
+let formQtys = [0,0,0];
+
+function adjQty(i, d){
+  formQtys[i] = Math.max(0, formQtys[i]+d);
+  document.getElementById('q'+i).textContent = formQtys[i];
+  const total = formQtys.reduce((s,v)=>s+v,0);
+  document.getElementById('loc-total').textContent = total+' bottle'+(total!==1?'s':'')+' total';
+}
+
+function openAddManual(prefill=null){
+  editId = null;
+  formQtys = [1,0,0];
+  document.getElementById('form-title').textContent = 'Add Wine';
+  document.getElementById('f-name').value = prefill?.name || '';
+  document.getElementById('f-region').value = prefill?.region || '';
+  document.getElementById('f-vintage').value = prefill?.vintage || '';
+  document.getElementById('f-category').value = prefill?.category || 'Virginia';
+  document.getElementById('f-window').value = prefill?.window || '';
+  document.getElementById('f-optimal').value = prefill?.suggestedOptimal || '';
+  document.getElementById('f-note').value = '';
+  [0,1,2].forEach(i=>{ document.getElementById('q'+i).textContent=formQtys[i]; });
+  document.getElementById('loc-total').textContent = '1 bottle total';
+  document.getElementById('btn-delete').style.display = 'none';
+  closeAddChoice();
+  openSheet('form');
+  setTimeout(()=>document.getElementById('f-name').focus(),350);
+}
+
+function openEdit(id){
+  const w = wines.find(x=>x.id===id);
+  if(!w) return;
+  editId = id;
+  formQtys = LOCS.map(l=>w.locations[l]||0);
+  document.getElementById('form-title').textContent = 'Edit Wine';
+  document.getElementById('f-name').value = w.name;
+  document.getElementById('f-region').value = w.region;
+  document.getElementById('f-vintage').value = w.vintage;
+  document.getElementById('f-category').value = w.category;
+  document.getElementById('f-window').value = w.window||'';
+  document.getElementById('f-optimal').value = w.optimal;
+  document.getElementById('f-note').value = w.note||'';
+  [0,1,2].forEach(i=>{ document.getElementById('q'+i).textContent=formQtys[i]; });
+  const total = formQtys.reduce((s,v)=>s+v,0);
+  document.getElementById('loc-total').textContent = total+' bottle'+(total!==1?'s':'')+' total';
+  document.getElementById('btn-delete').style.display = 'block';
+  openSheet('form');
+}
+
+function closeForm(){ closeSheet('form'); editId=null; }
+
+function saveWine(){
+  const name = document.getElementById('f-name').value.trim();
+  if(!name){ alert('Please enter a wine name.'); return; }
+  const total = formQtys.reduce((s,v)=>s+v,0);
+  if(!total){ alert('Please add at least 1 bottle in a location.'); return; }
+  const locs = {};
+  LOCS.forEach((l,i)=>{ locs[l]=formQtys[i]; });
+  const w = {
+    id:editId||nextId++,
+    name,
+    region:document.getElementById('f-region').value.trim(),
+    vintage:document.getElementById('f-vintage').value.trim()||'NV',
+    locations:locs,
+    window:document.getElementById('f-window').value.trim(),
+    optimal:parseInt(document.getElementById('f-optimal').value)||2028,
+    category:document.getElementById('f-category').value,
+    note:document.getElementById('f-note').value.trim(),
+  };
+  if(editId){ wines[wines.findIndex(x=>x.id===editId)]=w; }
+  else { wines.push(w); }
+  save(); closeForm(); renderList();
+}
+
+function deleteWine(){
+  const w = wines.find(x=>x.id===editId);
+  if(!w) return;
+  if(!confirm(`Delete "${w.name}"?`)) return;
+  wines = wines.filter(x=>x.id!==editId);
+  save(); closeForm(); renderList();
+}
+
+// ── SETTINGS ────────────────────────────────────────────────────────
+function showApiStatus(msg, type){ const el=document.getElementById('api-status'); el.textContent=msg; el.className='api-status '+type; }
+
+function saveApiKey(){
+  const k = document.getElementById('api-key-input').value.trim();
+  if(!k){ showApiStatus('Please enter a key','err'); return; }
+  if(!k.startsWith('sk-ant')){ showApiStatus('This doesn\'t look like an Anthropic API key','err'); return; }
+  lsSet('cellar_api_key', k);
+  showApiStatus('Key saved ✓','ok');
+}
+
+function exportCSV(){
+  const hd = ['Name','Region','Vintage','Wine Cellar','Basement Chiller','Apartment','Total','Drink Window','Optimal Year','Category','Status','Notes'];
+  const rows = wines.map(w=>{
+    const s = status(w.optimal);
+    return [w.name,w.region,w.vintage,w.locations['Wine Cellar']||0,w.locations['Basement Chiller']||0,w.locations['Apartment']||0,totalQty(w),w.window,w.optimal,w.category,s.l,w.note||''].map(v=>`"${String(v).replace(/"/g,'""')}"`).join(',');
+  });
+  const csv = [hd.join(','),...rows].join('\n');
+  const a = document.createElement('a');
+  a.href = 'data:text/csv;charset=utf-8,'+encodeURIComponent(csv);
+  a.download = 'wine_cellar.csv';
+  a.click();
+}
+
+// ── INIT ────────────────────────────────────────────────────────────
+try { load(); } catch(e) { wines = DEFAULT_WINES.map(w=>({...w,locations:{...w.locations}})); }
+if(!wines || wines.length===0){ wines = DEFAULT_WINES.map(w=>({...w,locations:{...w.locations}})); }
+try { renderList(); } catch(e) { document.getElementById('wine-list').innerHTML='<div class="empty-state"><div class="icon">⚠️</div><p>Load error: '+e.message+'</p></div>'; }
+</script>
+</body>
+</html>
