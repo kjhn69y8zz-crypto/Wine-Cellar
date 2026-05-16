@@ -208,7 +208,10 @@ input[type=file] { display:none; }
 <!-- ══ MAIN SCREEN ══════════════════════════════════════════════════ -->
 <div class="screen active" id="screen-main">
   <div class="app-header">
-    <div class="subtitle">Wine Cellar</div>
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
+      <div class="subtitle" style="margin-bottom:0">Wine Cellar</div>
+      <button onclick="showSettings()" style="background:var(--bg4);border:1px solid #3a2510;color:var(--gold2);padding:7px 14px;border-radius:20px;font-size:.8rem;cursor:pointer;font-family:inherit;letter-spacing:.05em">⚙ Settings</button>
+    </div>
     <h1>My Collection</h1>
     <div class="stats-row" id="stats-row"></div>
   </div>
@@ -655,7 +658,7 @@ async function handlePhoto(event){
           'anthropic-dangerous-direct-browser-access':'true'
         },
         body:JSON.stringify({
-          model:'claude-sonnet-4-20250514',
+          model:'claude-3-5-haiku-20241022',
           max_tokens:600,
           messages:[{role:'user',content:[
             {type:'image',source:{type:'base64',media_type:mediaType,data:b64}},
@@ -674,7 +677,7 @@ Return ONLY the JSON, no markdown, no explanation.`}
       });
       const data = await resp.json();
       overlay.classList.remove('show');
-      if(data.error){ showScanError('API error: '+data.error.message); return; }
+      if(data.error){ showScanError('API error: '+data.error.message+' (type: '+data.error.type+')'); return; }
       const text = data.content[0].text.trim();
       const clean = text.replace(/```json|```/g,'').trim();
       const parsed = JSON.parse(clean);
