@@ -542,8 +542,8 @@ body{ background:transparent !important; }
   </div>
   <div class="sheet-body">
     <div class="form-field">
-      <label class="form-label">What are you eating?</label>
-      <input class="form-input" id="pair-meal" placeholder="e.g. grilled ribeye with peppercorn sauce" autocomplete="off">
+      <label class="form-label">What's the occasion?</label>
+      <input class="form-input" id="pair-meal" placeholder="a meal, a mood, the weather, anything — e.g. sipping on a hot day, cozy night in, grilled ribeye" autocomplete="off">
     </div>
     <button class="btn-primary" onclick="pairMeal()">Suggest a wine from my cellar</button>
     <div id="pair-result" style="margin-top:14px"></div>
@@ -1264,7 +1264,7 @@ async function pairMeal(){
   const out=document.getElementById('pair-result');
   if(!apiKey){ out.innerHTML='<div class="review-err">Add your Anthropic API key in Settings ⚙ to use this.</div>'; return; }
   const meal=document.getElementById('pair-meal').value.trim();
-  if(!meal){ out.innerHTML='<div class="review-err">Type in what you’re eating first.</div>'; return; }
+  if(!meal){ out.innerHTML='<div class="review-err">Tell me a bit about what you’re in the mood for first.</div>'; return; }
   out.innerHTML='<div class="review-loading"><div class="spinner"></div> Choosing from your cellar…</div>';
   const candidates=wines.filter(w=>totalQty(w)>0).map(w=>({name:w.name,vintage:w.vintage,type:w.type,grape:w.grape,region:w.region,country:w.country,status:status(w.optimal).l}));
   try{
@@ -1273,7 +1273,7 @@ async function pairMeal(){
       headers:{'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
       body:JSON.stringify({
         model:'claude-sonnet-5', max_tokens:900,
-        messages:[{role:'user',content:`You are a Master Sommelier choosing from one person's actual cellar. The meal: "${meal}". Cellar inventory (JSON array): ${JSON.stringify(candidates)}. Recommend the best 1-3 wines FROM THIS LIST ONLY, best first, favoring wines that are ready to drink when it makes sense. Use the exact "name" values from the list. Return ONLY a JSON array, no markdown: [{"name":"exact name from list","vintage":"vintage from list","reason":"1-2 sentence reason it pairs well"}]`}]
+        messages:[{role:'user',content:`You are a Master Sommelier choosing from one person's actual cellar. They told you what they're in the mood for — this could be a specific dish, a general craving, an occasion, the weather, or just a feeling (e.g. "something to sip on a hot day", "cozy night in", "celebrating", or a specific meal like "grilled ribeye"). What they said: "${meal}". Cellar inventory (JSON array): ${JSON.stringify(candidates)}. Recommend the best 1-3 wines FROM THIS LIST ONLY, best first, favoring wines that are ready to drink when it makes sense. Base the recommendation on whatever is most relevant to their input — food pairing only if they mentioned food, otherwise weather, mood, occasion, or style as appropriate. Use the exact "name" values from the list. Return ONLY a JSON array, no markdown: [{"name":"exact name from list","vintage":"vintage from list","reason":"1-2 sentence reason it fits what they asked for"}]`}]
       })
     });
     const data=await resp.json();
@@ -1281,7 +1281,7 @@ async function pairMeal(){
     const text=data.content.filter(x=>x.type==='text').map(x=>x.text).join('').trim();
     const recs=JSON.parse(text.replace(/```json|```/g,'').trim());
     if(!Array.isArray(recs)||!recs.length){ out.innerHTML='<div class="review-err">No match found. Try rephrasing the meal.</div>'; return; }
-    let html='<div class="review-head" style="margin-bottom:10px">🍷 Best pairings from your cellar</div>';
+    let html='<div class="review-head" style="margin-bottom:10px">🍷 From your cellar</div>';
     recs.forEach((r,i)=>{
       const match=wines.find(w=>w.name===r.name && totalQty(w)>0) || wines.find(w=>w.name===r.name);
       const id=match?match.id:null;
