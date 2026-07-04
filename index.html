@@ -8,17 +8,17 @@
 <title>Wine Cellar</title>
 <style>
 :root {
-  --bg:#0a0604; --bg2:#130e08; --bg3:#1e1509; --bg4:#2a1d0c;
-  --gold:#b8901a; --gold2:#d4a835; --gold3:#f0c840;
-  --text:#f0e4cc; --text2:#c0a060; --text3:#806040; --text4:#504030;
+  --bg:#070a0d; --bg2:#0f141a; --bg3:#182029; --bg4:#22303c;
+  --gold:#7ba0bd; --gold2:#a8c4d8; --gold3:#eef3f6;
+  --text:#eef2f5; --text2:#9fb0bd; --text3:#6b7c88; --text4:#4a5761;
   --red:#dc2626; --red-t:#fca5a5;
   --orange:#ea580c; --orange-t:#fdba74;
   --amber:#d97706; --amber-t:#fcd34d;
   --green:#16a34a; --green-t:#86efac;
   --blue:#4338ca; --blue-t:#a5b4fc;
-  --cellar:#92400e; --cellar-t:#fbbf24;
+  --cellar:#3a5a70; --cellar-t:#9fd4e8;
   --chiller:#0e7490; --chiller-t:#67e8f9;
-  --apt:#5b21b6; --apt-t:#c4b5fd;
+  --apt:#454a68; --apt-t:#c6cbe0;
   --radius:14px; --radius-sm:8px;
   --safe-bottom: env(safe-area-inset-bottom, 20px);
 }
@@ -32,21 +32,21 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
 
 /* ── HEADER ──────────────────────────────────────────────────────── */
 .app-header {
-  background:linear-gradient(180deg,#1e0d00 0%,#2d1500 100%);
+  background:linear-gradient(180deg,#0c1116 0%,#141c24 100%);
   padding:52px 16px 12px;
-  border-bottom:1px solid #3a2510;
+  border-bottom:1px solid #2e3b46;
   flex-shrink:0;
 }
 .app-header h1 { font-size:1.5rem; font-weight:400; color:#f5e6c8; letter-spacing:.03em; }
 .app-header .subtitle { font-size:.72rem; color:var(--text3); letter-spacing:.15em; text-transform:uppercase; margin-bottom:4px; }
 .stats-row { display:flex; gap:12px; margin-top:8px; flex-wrap:wrap; }
-.stat-chip { background:var(--bg4); border:1px solid #3a2510; border-radius:20px; padding:3px 10px; font-size:.72rem; color:var(--text2); }
+.stat-chip { background:var(--bg4); border:1px solid #2e3b46; border-radius:20px; padding:3px 10px; font-size:.72rem; color:var(--text2); }
 .stat-chip strong { color:var(--gold3); }
 
 /* ── FILTER BAR ──────────────────────────────────────────────────── */
 .filter-bar {
   background:var(--bg2);
-  border-bottom:1px solid #1e1208;
+  border-bottom:1px solid #182029;
   flex-shrink:0;
   padding:8px 0 0;
 }
@@ -61,12 +61,12 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
 
 /* ── WINE LIST ───────────────────────────────────────────────────── */
 .wine-list { flex:1; overflow-y:auto; -webkit-overflow-scrolling:touch; padding:8px 12px calc(80px + var(--safe-bottom)); }
-.group-label { font-size:.6rem; letter-spacing:.2em; text-transform:uppercase; color:var(--gold); padding:12px 4px 6px; border-bottom:1px solid #1e1208; margin-bottom:6px; }
+.group-label { font-size:.6rem; letter-spacing:.2em; text-transform:uppercase; color:var(--gold); padding:12px 4px 6px; border-bottom:1px solid #182029; margin-bottom:6px; }
 .group-count { color:var(--text4); }
 
 .wine-card {
   background:var(--bg2);
-  border:1px solid #1e1208;
+  border:1px solid #182029;
   border-radius:var(--radius);
   padding:14px;
   margin-bottom:8px;
@@ -97,7 +97,7 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
 .fab {
   position:fixed; bottom:calc(16px + var(--safe-bottom)); right:16px;
   width:58px; height:58px; border-radius:50%;
-  background:linear-gradient(135deg,#c8821a,#a06010);
+  background:linear-gradient(135deg,#5b7c99,#34495e);
   border:none; color:#fff; font-size:1.6rem; cursor:pointer;
   box-shadow:0 4px 20px rgba(0,0,0,.5);
   display:flex; align-items:center; justify-content:center;
@@ -116,7 +116,7 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
 /* ── SHEET (slide up modal) ──────────────────────────────────────── */
 .sheet-overlay { position:fixed; inset:0; background:rgba(0,0,0,0); z-index:200; pointer-events:none; transition:background .25s; }
 .sheet-overlay.open { background:rgba(0,0,0,.7); pointer-events:all; }
-.sheet { position:fixed; bottom:0; left:0; right:0; background:var(--bg2); border-radius:20px 20px 0 0; border-top:1px solid #3a2510; z-index:201; transform:translateY(100%); transition:transform .3s cubic-bezier(.32,.72,0,1); max-height:92vh; display:flex; flex-direction:column; }
+.sheet { position:fixed; bottom:0; left:0; right:0; background:var(--bg2); border-radius:20px 20px 0 0; border-top:1px solid #2e3b46; z-index:201; transform:translateY(100%); transition:transform .3s cubic-bezier(.32,.72,0,1); max-height:92vh; display:flex; flex-direction:column; }
 .sheet.open { transform:translateY(0); }
 .sheet-handle { width:36px; height:4px; background:var(--bg4); border-radius:2px; margin:10px auto 4px; flex-shrink:0; }
 .sheet-header { padding:8px 16px 12px; display:flex; align-items:center; gap:12px; flex-shrink:0; }
@@ -143,10 +143,10 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
 .loc-qty-label { flex:1; font-size:.85rem; }
 .loc-qty-controls { display:flex; align-items:center; gap:10px; }
 .qty-btn { width:32px; height:32px; border-radius:50%; background:var(--bg4); border:1px solid #3a2a15; color:var(--text); font-size:1.1rem; cursor:pointer; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
-.qty-btn:active { background:#3a2d18; }
+.qty-btn:active { background:#22303c; }
 .qty-num { min-width:24px; text-align:center; font-size:1rem; color:var(--gold3); font-weight:600; }
 .loc-total { font-size:.72rem; color:var(--text3); text-align:center; padding:8px; font-style:italic; }
-.btn-primary { width:100%; padding:15px; background:linear-gradient(135deg,#c8821a,#a06010); border:none; color:#fff; border-radius:var(--radius); font-size:1rem; cursor:pointer; font-family:inherit; letter-spacing:.05em; margin-top:4px; }
+.btn-primary { width:100%; padding:15px; background:linear-gradient(135deg,#5b7c99,#34495e); border:none; color:#fff; border-radius:var(--radius); font-size:1rem; cursor:pointer; font-family:inherit; letter-spacing:.05em; margin-top:4px; }
 .btn-primary:active { opacity:.85; }
 .btn-danger { width:100%; padding:12px; background:transparent; border:1px solid #7f1d1d; color:#fca5a5; border-radius:var(--radius); font-size:.85rem; cursor:pointer; font-family:inherit; margin-top:8px; }
 .btn-danger:active { background:#7f1d1d30; }
@@ -166,14 +166,14 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
 .scan-preview { width:100%; max-width:320px; border-radius:var(--radius); overflow:hidden; background:var(--bg3); border:2px dashed var(--bg4); min-height:200px; display:flex; align-items:center; justify-content:center; position:relative; }
 .scan-preview img { width:100%; border-radius:var(--radius); display:none; }
 .scan-placeholder { color:var(--text4); font-size:.85rem; padding:20px; }
-.scan-btn { display:flex; align-items:center; gap:8px; padding:14px 28px; background:linear-gradient(135deg,#c8821a,#a06010); border:none; color:#fff; border-radius:var(--radius); font-size:1rem; cursor:pointer; font-family:inherit; }
+.scan-btn { display:flex; align-items:center; gap:8px; padding:14px 28px; background:linear-gradient(135deg,#5b7c99,#34495e); border:none; color:#fff; border-radius:var(--radius); font-size:1rem; cursor:pointer; font-family:inherit; }
 .scan-btn:active { opacity:.8; }
 .analyzing-overlay { position:absolute; inset:0; background:rgba(0,0,0,.7); display:none; align-items:center; justify-content:center; border-radius:var(--radius); flex-direction:column; gap:10px; }
 .analyzing-overlay.show { display:flex; }
-.spinner { width:32px; height:32px; border:3px solid #3a2510; border-top-color:var(--gold); border-radius:50%; animation:spin .8s linear infinite; }
+.spinner { width:32px; height:32px; border:3px solid #2e3b46; border-top-color:var(--gold); border-radius:50%; animation:spin .8s linear infinite; }
 @keyframes spin { to { transform:rotate(360deg); } }
 .analyzing-text { color:var(--text2); font-size:.85rem; }
-.scan-result { background:var(--bg3); border:1px solid #3a2510; border-radius:var(--radius); padding:14px; width:100%; max-width:320px; text-align:left; display:none; }
+.scan-result { background:var(--bg3); border:1px solid #2e3b46; border-radius:var(--radius); padding:14px; width:100%; max-width:320px; text-align:left; display:none; }
 .scan-result.show { display:block; }
 .scan-result h3 { font-size:.9rem; color:var(--gold2); margin-bottom:8px; }
 .scan-result-item { font-size:.8rem; color:var(--text2); margin-bottom:4px; }
@@ -183,14 +183,14 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
 .settings-list { padding:16px; }
 .settings-section { margin-bottom:24px; }
 .settings-section-label { font-size:.62rem; letter-spacing:.2em; text-transform:uppercase; color:var(--gold); margin-bottom:10px; display:block; }
-.settings-item { background:var(--bg2); border:1px solid #1e1208; border-radius:var(--radius); padding:14px; margin-bottom:8px; }
+.settings-item { background:var(--bg2); border:1px solid #182029; border-radius:var(--radius); padding:14px; margin-bottom:8px; }
 .settings-item label { display:block; font-size:.72rem; color:var(--text3); margin-bottom:6px; letter-spacing:.08em; }
 .settings-item input { width:100%; background:var(--bg3); border:1px solid var(--bg4); color:var(--text); padding:10px 12px; border-radius:var(--radius-sm); font-size:.8rem; font-family:monospace; outline:none; }
 .settings-item input:focus { border-color:var(--gold); }
 .api-status { font-size:.7rem; margin-top:6px; }
 .api-status.ok { color:var(--green-t); }
 .api-status.err { color:var(--red-t); }
-.btn-save-settings { width:100%; padding:14px; background:linear-gradient(135deg,#c8821a,#a06010); border:none; color:#fff; border-radius:var(--radius); font-size:.95rem; cursor:pointer; font-family:inherit; }
+.btn-save-settings { width:100%; padding:14px; background:linear-gradient(135deg,#5b7c99,#34495e); border:none; color:#fff; border-radius:var(--radius); font-size:.95rem; cursor:pointer; font-family:inherit; }
 
 /* ── EMPTY STATE ─────────────────────────────────────────────────── */
 .empty-state { text-align:center; padding:60px 20px; color:var(--text3); }
@@ -213,10 +213,10 @@ input[type=file] { display:none; }
 .opt{color:var(--text4);font-weight:400;text-transform:none;letter-spacing:0;font-size:.7rem}
 .loc-kitchen{background:#130a22;color:var(--apt-t);border:1px solid #3a2060;}
 .photo-grid{display:flex;gap:8px;flex-wrap:wrap}
-.photo-thumb{position:relative;width:76px;height:76px;border-radius:10px;overflow:hidden;border:1px solid #3a2510}
+.photo-thumb{position:relative;width:76px;height:76px;border-radius:10px;overflow:hidden;border:1px solid #2e3b46}
 .photo-thumb img{width:100%;height:100%;object-fit:cover;display:block;cursor:pointer}
 .photo-del{position:absolute;top:2px;right:2px;width:20px;height:20px;border-radius:50%;border:none;background:rgba(0,0,0,.6);color:#fff;font-size:.7rem;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center}
-.photo-add{width:76px;height:76px;border-radius:10px;border:1px dashed #5a451f;background:var(--bg3);color:var(--gold2);font-size:1.3rem;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer}
+.photo-add{width:76px;height:76px;border-radius:10px;border:1px dashed #3d4d5a;background:var(--bg3);color:var(--gold2);font-size:1.3rem;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer}
 .photo-add span{font-size:.6rem;letter-spacing:.05em}
 .photo-viewer{position:fixed;inset:0;background:rgba(0,0,0,.92);display:none;align-items:center;justify-content:center;z-index:100;padding:20px}
 .photo-viewer.open{display:flex}
@@ -229,20 +229,20 @@ input[type=file] { display:none; }
     radial-gradient(130% 100% at 50% -20%, rgba(184,144,26,.16), transparent 62%),
     linear-gradient(180deg,#2a1400 0%,#160b02 100%);
   background-size:cover; background-position:center;
-  position:relative; box-shadow:inset 0 -1px 0 #3a2510, 0 4px 18px rgba(0,0,0,.4);
+  position:relative; box-shadow:inset 0 -1px 0 #2e3b46, 0 4px 18px rgba(0,0,0,.4);
 }
 #main-header h1{ text-shadow:0 2px 12px rgba(0,0,0,.6); }
 body{ background:
   radial-gradient(120% 60% at 50% 0%, #170d04 0%, var(--bg) 55%); }
 /* AI review */
-.btn-review{width:100%;background:linear-gradient(180deg,#2a1d0c,#1a1207);border:1px solid #5a451f;color:var(--gold3);padding:12px;border-radius:10px;font-family:inherit;font-size:.86rem;cursor:pointer;letter-spacing:.03em}
+.btn-review{width:100%;background:linear-gradient(180deg,#1c242c,#12181e);border:1px solid #34424e;color:var(--gold3);padding:12px;border-radius:10px;font-family:inherit;font-size:.86rem;cursor:pointer;letter-spacing:.03em}
 .btn-review:active{transform:translateY(1px)}
-.review-panel{margin-top:10px;background:var(--bg3);border:1px solid #4a3512;border-radius:10px;padding:13px}
+.review-panel{margin-top:10px;background:var(--bg3);border:1px solid #2e3b46;border-radius:10px;padding:13px}
 .review-loading{display:flex;align-items:center;gap:10px;color:var(--text2);font-size:.85rem}
 .review-head{color:var(--gold3);font-size:.78rem;letter-spacing:.06em;text-transform:uppercase;margin-bottom:8px}
 .review-row{font-size:.92rem;margin:5px 0;color:var(--text)}
 .review-old{color:var(--text3);font-size:.76rem}
-.review-rat{font-size:.83rem;color:var(--text2);line-height:1.55;margin-top:8px;font-style:italic;border-top:1px solid #2a1d0c;padding-top:8px}
+.review-rat{font-size:.83rem;color:var(--text2);line-height:1.55;margin-top:8px;font-style:italic;border-top:1px solid #22303c;padding-top:8px}
 .review-err{color:var(--red-t);font-size:.82rem}
 .type-fortifieddessert{background:#8a4a12}
 </style>
@@ -251,13 +251,13 @@ body{ background:
 #app-bg{ position:fixed; inset:0; z-index:-1;
   background:linear-gradient(180deg, rgba(8,5,2,.5) 0%, rgba(8,5,2,.82) 45%, rgba(8,5,2,.93) 100%), var(--barrel) center/cover no-repeat; }
 body{ background:transparent !important; }
-#main-header{ background:linear-gradient(180deg, rgba(20,10,2,.32), rgba(13,8,2,.72)) !important; }
+#main-header{ background:linear-gradient(180deg, rgba(10,14,18,.18), rgba(8,11,15,.55)) !important; }
 .filter-bar{ background:rgba(15,10,5,.82); -webkit-backdrop-filter:blur(3px); backdrop-filter:blur(3px); }
-#screen-settings{ background:linear-gradient(180deg, rgba(8,5,2,.92), rgba(8,5,2,.95)); }
+#screen-settings{ background:linear-gradient(180deg, rgba(7,10,13,.94), rgba(7,10,13,.97)); }
 .wine-card{ background:rgba(22,16,9,.92) !important; }
 .dropdown-row{ display:flex; gap:8px; padding:2px 12px 8px; }
-.menu-select{ flex:1; min-width:0; background:var(--bg4); color:var(--text); border:1px solid #3a2510; border-radius:10px; padding:10px 30px 10px 12px; font-family:inherit; font-size:.82rem; -webkit-appearance:none; appearance:none;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23b8901a' fill='none' stroke-width='1.5'/%3E%3C/svg%3E");
+.menu-select{ flex:1; min-width:0; background:var(--bg4); color:var(--text); border:1px solid #2e3b46; border-radius:10px; padding:10px 30px 10px 12px; font-family:inherit; font-size:.82rem; -webkit-appearance:none; appearance:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%237ba0bd' fill='none' stroke-width='1.5'/%3E%3C/svg%3E");
   background-repeat:no-repeat; background-position:right 12px center; }
 .group-label.static{ cursor:default; }
 .pair-list{ margin:6px 0 0; padding-left:18px; color:var(--text2); font-size:.85rem; line-height:1.6; }
@@ -265,9 +265,9 @@ body{ background:transparent !important; }
 </style>
 <style>
 /* more transparent cards so the barrel room shows through */
-#app-bg{ background:linear-gradient(180deg, rgba(8,5,2,.30) 0%, rgba(8,5,2,.56) 45%, rgba(8,5,2,.76) 100%), var(--barrel) center/cover no-repeat; }
-.wine-card{ background:rgba(18,12,6,.5) !important; -webkit-backdrop-filter:blur(8px); backdrop-filter:blur(8px); border:1px solid rgba(150,112,48,.38) !important; }
-.filter-bar{ background:rgba(14,9,4,.62) !important; }
+#app-bg{ background:linear-gradient(180deg, rgba(7,10,13,.18) 0%, rgba(7,10,13,.42) 45%, rgba(7,10,13,.64) 100%), var(--barrel) center/cover no-repeat; }
+.wine-card{ background:rgba(14,19,24,.44) !important; -webkit-backdrop-filter:blur(8px); backdrop-filter:blur(8px); border:1px solid rgba(140,165,185,.30) !important; }
+.filter-bar{ background:rgba(10,14,18,.5) !important; }
 .group-label.static{ cursor:default; -webkit-backdrop-filter:blur(3px); backdrop-filter:blur(3px); border-radius:6px; }
 /* horizontally scrollable dropdown row */
 .dropdown-row{ display:flex; gap:8px; overflow-x:auto; padding:2px 12px 10px; -webkit-overflow-scrolling:touch; scrollbar-width:none; }
@@ -275,16 +275,85 @@ body{ background:transparent !important; }
 .dropdown-row .menu-select{ flex:0 0 auto; }
 .clear-chip{ flex:0 0 auto; background:rgba(120,40,40,.4); border:1px solid #6a2020; color:var(--red-t); border-radius:10px; padding:0 14px; font-family:inherit; font-size:.8rem; cursor:pointer; }
 /* pour tonight button */
-.pair-btn{ margin-top:12px; width:100%; background:linear-gradient(180deg, rgba(120,74,18,.55), rgba(78,46,10,.55)); border:1px solid #6a4a1f; color:var(--gold3); padding:12px; border-radius:12px; font-family:inherit; font-size:.9rem; letter-spacing:.02em; cursor:pointer; -webkit-backdrop-filter:blur(4px); backdrop-filter:blur(4px); }
+.pair-btn{ margin-top:12px; width:100%; background:linear-gradient(180deg, rgba(58,74,92,.55), rgba(30,40,52,.55)); border:1px solid #3d4d5a; color:var(--gold3); padding:12px; border-radius:12px; font-family:inherit; font-size:.9rem; letter-spacing:.02em; cursor:pointer; -webkit-backdrop-filter:blur(4px); backdrop-filter:blur(4px); }
 .pair-btn:active{ transform:translateY(1px); }
 /* pairing recommendations */
-.pair-rec{ display:flex; gap:12px; align-items:flex-start; background:rgba(22,16,9,.72); border:1px solid #3a2510; border-radius:12px; padding:12px; margin-bottom:8px; cursor:pointer; }
+.pair-rec{ display:flex; gap:12px; align-items:flex-start; background:rgba(22,16,9,.72); border:1px solid #2e3b46; border-radius:12px; padding:12px; margin-bottom:8px; cursor:pointer; }
 .pair-rank{ flex:0 0 auto; width:24px; height:24px; border-radius:50%; background:var(--gold); color:#1a0d00; font-weight:700; font-size:.8rem; display:flex; align-items:center; justify-content:center; margin-top:1px; }
 .pair-rec-name{ color:var(--text); font-size:.95rem; }
 .pair-vint{ color:var(--text2); font-size:.82rem; }
 .pair-rec-reason{ color:var(--text2); font-size:.83rem; line-height:1.5; margin-top:3px; }
 </style>
+<style>
+.header-nav{ display:flex; gap:8px; flex-wrap:wrap; justify-content:flex-end; }
+.nav-pill{ background:var(--bg4); border:1px solid #2e3b46; color:var(--gold2); padding:7px 12px; border-radius:20px; font-size:.72rem; cursor:pointer; font-family:inherit; letter-spacing:.02em; white-space:nowrap; }
+.nav-pill:active{ transform:translateY(1px); }
+
+/* ready to drink widget */
+.ready-now{ margin-top:12px; }
+.ready-now-head{ display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; font-size:.78rem; color:var(--gold3); letter-spacing:.04em; }
+.shuffle-btn{ background:none; border:1px solid #2e3b46; color:var(--text2); border-radius:14px; padding:4px 10px; font-size:.68rem; cursor:pointer; font-family:inherit; }
+.ready-now-row{ display:flex; gap:8px; overflow-x:auto; -webkit-overflow-scrolling:touch; scrollbar-width:none; padding-bottom:2px; }
+.ready-now-row::-webkit-scrollbar{ display:none; }
+.ready-card{ flex:0 0 auto; width:148px; background:rgba(20,14,7,.7); border:1px solid #2e3b46; border-radius:12px; padding:10px; cursor:pointer; -webkit-backdrop-filter:blur(4px); backdrop-filter:blur(4px); }
+.ready-name{ font-size:.8rem; color:var(--text); line-height:1.3; margin-bottom:4px; }
+.ready-sub{ font-size:.66rem; color:var(--text3); }
+.ready-status{ font-size:.64rem; margin-top:5px; letter-spacing:.05em; }
+
+/* stats bars */
+.stat-bar-row{ display:flex; align-items:center; gap:8px; margin:8px 0; }
+.stat-bar-label{ width:104px; font-size:.75rem; color:var(--text2); flex-shrink:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.stat-bar-track{ flex:1; height:8px; background:var(--bg4); border-radius:4px; overflow:hidden; }
+.stat-bar-fill{ height:100%; background:linear-gradient(90deg,#4a6578,var(--gold)); }
+.stat-bar-val{ width:34px; text-align:right; font-size:.75rem; color:var(--gold3); flex-shrink:0; }
+.stat-overview-row{ font-size:.98rem; color:var(--text); }
+
+/* journal */
+.journal-card{ background:rgba(20,14,7,.75); border:1px solid #2e3b46; border-radius:12px; padding:12px; margin-bottom:8px; }
+.journal-top{ display:flex; justify-content:space-between; align-items:flex-start; gap:8px; }
+.journal-wine{ color:var(--text); font-size:.9rem; }
+.journal-meta{ display:flex; gap:10px; margin-top:4px; align-items:center; }
+.journal-stars{ color:var(--gold); font-size:.85rem; letter-spacing:1px; }
+.journal-date{ color:var(--text3); font-size:.72rem; }
+.journal-notes{ color:var(--text2); font-size:.82rem; margin-top:6px; line-height:1.5; }
+
+.star-picker{ display:flex; gap:4px; padding-top:4px; }
+.star{ font-size:1.5rem; color:var(--bg4); cursor:pointer; line-height:1; }
+.star.on{ color:var(--gold); }
+.checkbox-row{ display:flex; align-items:center; gap:8px; font-size:.8rem; color:var(--text2); }
+.checkbox-row input{ width:auto; }
+
+/* vintage quality + value chips */
+.vq-chip{ font-size:.58rem; padding:1px 7px; border-radius:8px; margin-left:6px; letter-spacing:.02em; vertical-align:middle; }
+.vq-excellent{ background:#1f3a1a; color:#8fce7a; border:1px solid #3a5a2e; }
+.vq-great{ background:#2a3410; color:#c9d97a; border:1px solid #4a5a1e; }
+.vq-good{ background:#2a2410; color:#d9c97a; border:1px solid #5a4a1e; }
+.vq-average{ background:#2a1e10; color:#d9a97a; border:1px solid #5a3a1e; }
+.vq-developing{ background:#241a2a; color:#c9a7d9; border:1px solid #4a2e5a; }
+
+.value-chip{ font-size:.68rem; padding:2px 9px; border-radius:8px; display:inline-block; background:var(--bg4); color:var(--gold3); border:1px solid #2e3b46; font-weight:600; }
+.conf-high{ background:#1f3a1a; color:#8fce7a; border:1px solid #3a5a2e; }
+.conf-medium{ background:#2a2410; color:#d9c97a; border:1px solid #5a4a1e; }
+.conf-low{ background:#2a1e10; color:#d9a97a; border:1px solid #5a3a1e; }
+
+.value-range{ font-size:1.3rem; color:var(--gold3); margin-top:2px; }
+.value-conf{ font-size:.72rem; margin-top:2px; padding:2px 8px; border-radius:8px; display:inline-block; }
+.vq-rating{ font-size:1.05rem; margin-top:2px; color:var(--text); }
+.current-tag{ font-size:.68rem; color:var(--text3); margin-top:6px; min-height:1em; }
+</style>
+<style>
+.gap-line{ font-size:.85rem; color:var(--text2); margin:4px 0; }
+.gap-line b{ color:var(--gold3); }
+.discover-cat{ font-size:.62rem; letter-spacing:.14em; text-transform:uppercase; color:var(--gold); margin:14px 0 6px; }
+.discover-cat:first-child{ margin-top:0; }
+.discover-rec{ background:rgba(20,26,32,.7); border:1px solid #2e3b46; border-radius:10px; padding:11px; margin-bottom:7px; }
+.discover-rec-name{ color:var(--text); font-size:.88rem; }
+.discover-rec-meta{ font-size:.74rem; margin-top:3px; }
+.discover-store{ color:var(--gold2); }
+.discover-rec-reason{ color:var(--text2); font-size:.8rem; margin-top:4px; line-height:1.5; }
+</style>
 </head>
+
 <body>
 <div id="app-bg"></div>
 
@@ -293,10 +362,15 @@ body{ background:transparent !important; }
   <div class="app-header" id="main-header">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
       <div class="subtitle" style="margin-bottom:0">Wine Cellar</div>
-      <button onclick="showSettings()" style="background:var(--bg4);border:1px solid #3a2510;color:var(--gold2);padding:7px 14px;border-radius:20px;font-size:.8rem;cursor:pointer;font-family:inherit;letter-spacing:.05em">⚙ Settings</button>
+      <div class="header-nav">
+        <button class="nav-pill" onclick="showJournal()">📓 Journal</button>
+        <button class="nav-pill" onclick="showStats()">📊 Stats</button>
+        <button class="nav-pill" onclick="showSettings()">⚙ Settings</button>
+      </div>
     </div>
     <h1>My Collection</h1>
     <div class="stats-row" id="stats-row"></div>
+    <div class="ready-now" id="ready-now"></div>
     <button class="pair-btn" onclick="openPair()">🍽️  What should I pour tonight?</button>
   </div>
   <div class="filter-bar">
@@ -368,7 +442,7 @@ body{ background:transparent !important; }
   </div>
   <div class="sheet-body">
     <div class="add-option" onclick="startScan()">
-      <div class="add-icon" style="background:#2d1500">📷</div>
+      <div class="add-icon" style="background:#182029">📷</div>
       <div class="add-option-text">
         <h3>Scan Label</h3>
         <p>Take a photo — Claude reads the label automatically</p>
@@ -484,6 +558,19 @@ body{ background:transparent !important; }
       <div class="review-panel" id="review-panel" style="display:none"></div>
     </div>
     <div class="form-field">
+      <button class="btn-review" type="button" onclick="checkVintageQuality()">🍇 AI vintage quality check</button>
+      <div class="current-tag" id="vq-existing"></div>
+      <div class="review-panel" id="vintage-panel" style="display:none"></div>
+    </div>
+    <div class="form-field">
+      <button class="btn-review" type="button" onclick="researchValue()">💰 Research market value</button>
+      <div class="current-tag" id="value-existing"></div>
+      <div class="review-panel" id="value-panel" style="display:none"></div>
+    </div>
+    <div class="form-field" id="journal-form-btn-wrap" style="display:none">
+      <button class="btn-review" type="button" onclick="openJournalFromForm()">📝 Log a tasting</button>
+    </div>
+    <div class="form-field">
       <label class="form-label">Bottles by Location</label>
       <div class="loc-qty-grid">
         <div class="loc-qty-row">
@@ -528,6 +615,60 @@ body{ background:transparent !important; }
     </div>
     <button class="btn-primary" onclick="saveWine()">Save Wine</button>
     <button class="btn-danger" id="btn-delete" onclick="deleteWine()" style="display:none">Delete Wine</button>
+    <div style="height:20px"></div>
+  </div>
+</div>
+
+<!-- ══ JOURNAL SCREEN ════════════════════════════════════════════ -->
+<div class="screen" id="screen-journal">
+  <div class="app-header" style="padding-bottom:16px">
+    <button class="back-btn" onclick="showMain()">‹ Back</button>
+    <h1 style="margin-top:4px">Tasting Journal</h1>
+  </div>
+  <div class="settings-list" id="journal-body" style="flex:1;overflow-y:auto"></div>
+</div>
+
+<!-- ══ STATS SCREEN ══════════════════════════════════════════════ -->
+<div class="screen" id="screen-stats">
+  <div class="app-header" style="padding-bottom:16px">
+    <button class="back-btn" onclick="showMain()">‹ Back</button>
+    <h1 style="margin-top:4px">Cellar Stats</h1>
+  </div>
+  <div class="settings-list" id="stats-body" style="flex:1;overflow-y:auto"></div>
+</div>
+
+<!-- ══ JOURNAL ENTRY SHEET ═════════════════════════════════════════ -->
+<div class="sheet-overlay" id="overlay-journal" onclick="closeJournalSheet()"></div>
+<div class="sheet" id="sheet-journal">
+  <div class="sheet-handle"></div>
+  <div class="sheet-header">
+    <span class="sheet-title">Log a Tasting</span>
+    <button class="back-btn" onclick="closeJournalSheet()">Cancel</button>
+  </div>
+  <div class="sheet-body">
+    <div class="form-field">
+      <label class="form-label">Wine</label>
+      <div id="journal-wine-name" style="color:var(--text);font-size:.92rem"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-field">
+        <label class="form-label">Date</label>
+        <input class="form-input" type="date" id="j-date">
+      </div>
+      <div class="form-field">
+        <label class="form-label">Rating</label>
+        <div class="star-picker" id="star-picker"></div>
+      </div>
+    </div>
+    <div class="form-field">
+      <label class="form-label">Notes</label>
+      <textarea class="form-textarea" id="j-notes" placeholder="How was it? Occasion, food, thoughts…"></textarea>
+    </div>
+    <div class="form-field" id="j-decrement-wrap">
+      <label class="checkbox-row"><input type="checkbox" id="j-decrement" checked> I opened a bottle — reduce my count</label>
+      <select class="form-select" id="j-location" style="margin-top:8px"></select>
+    </div>
+    <button class="btn-primary" onclick="saveJournalEntry()">Save to Journal</button>
     <div style="height:20px"></div>
   </div>
 </div>
@@ -658,6 +799,9 @@ const DEFAULT_WINES = [
 
 // ── STATE ───────────────────────────────────────────────────────────
 let wines = [], groupBy = 'Window', editId = null, nextId = 200;
+let journal = [], journalWine = null, journalRating = 5;
+let formVintageQuality = null, formValueEstimate = null, pendingVQ = null, pendingValue = null;
+let readyNowPicks = [];
 let scanData = null, pendingPhoto = null;
 let collapsed = {};        // sectionKey -> true when collapsed
 let formPhotos = [];       // photos being edited in the open form
@@ -758,9 +902,13 @@ function migrateWine(w){
   w.appellation = w.appellation || w.region || '';
   var FD = ['Quinta das Carvalhas 20yr Tawny','Ch Suduiraut Sauternes','Ch Lafaurie-Peyraguey Sauternes'];
   if(FD.indexOf(w.name)>=0 && (w.type==='Red'||w.type==='White')) w.type='Fortified/Dessert';
+  if(w.vintageQuality===undefined) w.vintageQuality=null;
+  if(w.valueEstimate===undefined) w.valueEstimate=null;
   return w;
 }
 function save(){ lsSet('cellar_mobile_v3', JSON.stringify(wines)); }
+function loadJournal(){ try{ const s=lsGet('cellar_journal_v1'); journal = s? JSON.parse(s) : []; }catch(e){ journal=[]; } }
+function saveJournal(){ lsSet('cellar_journal_v1', JSON.stringify(journal)); }
 
 function status(o){
   const y = o - 2026;
@@ -844,25 +992,28 @@ function wineCard(w){
     const n = w.locations[l]||0;
     if(!n) return '';
     const m = LOC_META[l];
-    return `<span class="loc-b ${m.cls}">${m.emoji} ${l}${n>1?` \u00d7${n}`:''}</span>`;
+    return `<span class="loc-b ${m.cls}">${m.emoji} ${l}${n>1?` ×${n}`:''}</span>`;
   }).join('');
   const typeCls = 'type-'+(w.type||'Red').toLowerCase().replace(/[^a-z0-9]/g,'');
+  const vqChip = (w.vintageQuality && w.vintageQuality.rating) ? `<span class="vq-chip vq-${w.vintageQuality.rating.toLowerCase()}">${w.vintageQuality.rating}</span>` : '';
+  const valueChip = w.valueEstimate ? `<div class="value-chip conf-${(w.valueEstimate.confidence||'').toLowerCase()}">$${w.valueEstimate.low}–$${w.valueEstimate.high}</div>` : '';
   return `<div class="wine-card" onclick="openEdit(${w.id})">
     <div class="wine-card-left">
       <div class="wine-name">${w.name}</div>
       <div class="wine-sub">
-        <span class="type-dot ${typeCls}"></span>${w.type||''}${w.grape?` \u00b7 ${w.grape}`:''}
+        <span class="type-dot ${typeCls}"></span>${w.type||''}${w.grape?` · ${w.grape}`:''}
       </div>
-      <div class="wine-region">${w.appellation||w.region||''}${w.country?` \u00b7 ${w.country}`:''}</div>
+      <div class="wine-region">${w.appellation||w.region||''}${w.country?` · ${w.country}`:''}</div>
+      ${valueChip?`<div style="margin:5px 0 2px">${valueChip}</div>`:''}
       <div class="wine-meta">
-        <span class="vintage-badge">${w.vintage}</span>
+        <span class="vintage-badge">${w.vintage}</span>${vqChip}
         <div class="loc-badges">${locs}</div>
       </div>
     </div>
     <div class="wine-card-right">
       <div class="optimal-year" style="color:${s.t}">${w.optimal}</div>
       <div class="status-b" style="background:${s.bg}20;color:${s.t};border:1px solid ${s.t}30">${s.l}</div>
-      ${qty>1?`<div class="qty-info">\u00d7${qty} bottles</div>`:''}
+      ${qty>1?`<div class="qty-info">×${qty} bottles</div>`:''}
     </div>
   </div>`;
 }
@@ -875,7 +1026,7 @@ function renderList(){
   renderStats();
   const data=filteredWines();
   const list=document.getElementById('wine-list');
-  if(!data.length){ list.innerHTML=`<div class="empty-state"><div class="icon">\U0001F377</div><p>No wines match these filters</p></div>`; return; }
+  if(!data.length){ list.innerHTML=`<div class="empty-state"><div class="icon">🍷</div><p>No wines match these filters</p></div>`; return; }
   let html='';
   if(sortBy==='name'){
     const s=[...data].sort((a,b)=>a.name.localeCompare(b.name));
@@ -897,7 +1048,9 @@ function renderList(){
 }
 
 // ── NAVIGATION ──────────────────────────────────────────────────────
-function showMain(){ document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active')); document.getElementById('screen-main').classList.add('active'); renderList(); }
+function showMain(){ document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active')); document.getElementById('screen-main').classList.add('active'); renderList(); renderReadyNow(); }
+function showJournal(){ document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active')); document.getElementById('screen-journal').classList.add('active'); renderJournalScreen(); }
+function showStats(){ document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active')); document.getElementById('screen-stats').classList.add('active'); renderStatsScreen(); }
 function showSettings(){ document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active')); document.getElementById('screen-settings').classList.add('active'); }
 
 // ── SHEETS ──────────────────────────────────────────────────────────
@@ -1023,7 +1176,10 @@ function openAddManual(prefill=null){
   [0,1,2].forEach(i=>{ document.getElementById('q'+i).textContent=formQtys[i]; });
   document.getElementById('loc-total').textContent = '1 bottle total';
   document.getElementById('btn-delete').style.display = 'none';
-  dismissReview(); dismissTasting();
+  dismissReview(); dismissTasting(); dismissVQ(); dismissValue();
+  formVintageQuality = null; formValueEstimate = null;
+  renderVQBadge(); renderValueBadge();
+  document.getElementById('journal-form-btn-wrap').style.display = 'none';
   formPhotos = pendingPhoto ? [pendingPhoto] : [];
   pendingPhoto = null;
   renderFormPhotos();
@@ -1050,7 +1206,11 @@ async function openEdit(id){
   const total = formQtys.reduce((s,v)=>s+v,0);
   document.getElementById('loc-total').textContent = total+' bottle'+(total!==1?'s':'')+' total';
   document.getElementById('btn-delete').style.display = 'block';
-  dismissReview(); dismissTasting();
+  dismissReview(); dismissTasting(); dismissVQ(); dismissValue();
+  formVintageQuality = w.vintageQuality || null;
+  formValueEstimate = w.valueEstimate || null;
+  renderVQBadge(); renderValueBadge();
+  document.getElementById('journal-form-btn-wrap').style.display = 'block';
   refreshDatalists();
   openSheet('form');
   formPhotos = await getPhotos(id);
@@ -1102,18 +1262,20 @@ async function saveWine(){
     window:document.getElementById('f-window').value.trim(),
     optimal:parseInt(document.getElementById('f-optimal').value)||2028,
     note:document.getElementById('f-note').value.trim(),
+    vintageQuality: formVintageQuality || null,
+    valueEstimate: formValueEstimate || null,
   };
   if(editId){ wines[wines.findIndex(x=>x.id===editId)]=w; }
   else { wines.push(w); }
   await setPhotos(id, formPhotos);
-  save(); closeForm(); renderList();
+  save(); closeForm(); renderList(); renderReadyNow();
 }
 async function deleteWine(){
   const w = wines.find(x=>x.id===editId); if(!w) return;
   if(!confirm(`Delete "${w.name}"?`)) return;
   await deletePhotosFor(editId);
   wines = wines.filter(x=>x.id!==editId);
-  save(); closeForm(); renderList();
+  save(); closeForm(); renderList(); renderReadyNow();
 }
 
 // ── SETTINGS ────────────────────────────────────────────────────────
@@ -1154,7 +1316,7 @@ async function applyCover(){
   if(url){
     if(bg) bg.style.backgroundImage=`linear-gradient(180deg, rgba(8,5,2,.5) 0%, rgba(8,5,2,.82) 45%, rgba(8,5,2,.93) 100%), url(${url})`;
     if(rm) rm.style.display='inline-block';
-    if(pv) pv.innerHTML=`<div style="font-size:.72rem;color:var(--text3);margin-bottom:6px">Your custom background:</div><img src="${url}" style="width:100%;border-radius:10px;border:1px solid #3a2510;display:block">`;
+    if(pv) pv.innerHTML=`<div style="font-size:.72rem;color:var(--text3);margin-bottom:6px">Your custom background:</div><img src="${url}" style="width:100%;border-radius:10px;border:1px solid #2e3b46;display:block">`;
   } else {
     if(bg) bg.style.backgroundImage='';
     if(rm) rm.style.display='none';
@@ -1297,10 +1459,365 @@ async function pairMeal(){
   }catch(e){ out.innerHTML='<div class="review-err">Could not suggest: '+e.message+'</div>'; }
 }
 
+// ── READY TO DRINK WIDGET ────────────────────────────────────────────
+function pickReadyNow(){
+  const pool = wines.filter(w=>totalQty(w)>0);
+  const openNow = pool.filter(w=>status(w.optimal).l==='OPEN NOW');
+  const soon = pool.filter(w=>status(w.optimal).l==='DRINK SOON');
+  const candidates = openNow.length ? openNow : (soon.length ? soon : pool);
+  const shuffled = [...candidates].sort(()=>Math.random()-0.5);
+  return shuffled.slice(0,3);
+}
+function renderReadyNow(){
+  const box = document.getElementById('ready-now');
+  if(!box) return;
+  if(!readyNowPicks.length) readyNowPicks = pickReadyNow();
+  if(!readyNowPicks.length){ box.innerHTML=''; return; }
+  box.innerHTML = `<div class="ready-now-head"><span>🍷 Ready to Drink</span><button class="shuffle-btn" onclick="shuffleReadyNow()">🔀 Shuffle</button></div>
+    <div class="ready-now-row">` + readyNowPicks.map(w=>{
+      const s = status(w.optimal);
+      return `<div class="ready-card" onclick="openEdit(${w.id})">
+        <div class="ready-name">${w.name}</div>
+        <div class="ready-sub">${w.vintage} \u00b7 ${w.type||''}</div>
+        <div class="ready-status" style="color:${s.t}">${s.l}</div>
+      </div>`;
+    }).join('') + `</div>`;
+}
+function shuffleReadyNow(){ readyNowPicks = pickReadyNow(); renderReadyNow(); }
+
+// ── AI VINTAGE QUALITY CHECK ─────────────────────────────────────────
+function renderVQBadge(){
+  const el = document.getElementById('vq-existing'); if(!el) return;
+  el.textContent = formVintageQuality ? `Current: ${formVintageQuality.rating} \u2014 checked ${formVintageQuality.checkedAt}` : '';
+}
+async function checkVintageQuality(){
+  const apiKey = lsGet('cellar_api_key');
+  const panel = document.getElementById('vintage-panel');
+  if(!apiKey){ panel.style.display='block'; panel.innerHTML='<div class="review-err">Add your Anthropic API key in Settings \u2699 to use this.</div>'; return; }
+  if(!_v('f-name')){ panel.style.display='block'; panel.innerHTML='<div class="review-err">Enter the wine name first.</div>'; return; }
+  panel.style.display='block';
+  panel.innerHTML='<div class="review-loading"><div class="spinner"></div> Checking vintage quality\u2026</div>';
+  const w={name:_v('f-name'),type:_v('f-type'),grape:_v('f-grape'),country:_v('f-country'),region:_v('f-region'),appellation:_v('f-appellation'),vintage:_v('f-vintage')};
+  try{
+    const resp = await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+      body:JSON.stringify({
+        model:'claude-sonnet-5', max_tokens:500,
+        messages:[{role:'user',content:`You are a Master Sommelier. Assess the QUALITY OF THIS VINTAGE for this wine's region and style \u2014 how good a growing/making year it was, based on general knowledge of that region's conditions that year. Wine: ${JSON.stringify(w)}. Return ONLY JSON, no markdown: {"rating":"Excellent|Great|Good|Average|Developing","note":"1 sentence on what made the vintage that way"}`}]
+      })
+    });
+    const data = await resp.json();
+    if(data.error){ panel.innerHTML='<div class="review-err">API error: '+data.error.message+'</div>'; return; }
+    const text = data.content.filter(x=>x.type==='text').map(x=>x.text).join('').trim();
+    const p = JSON.parse(text.replace(/```json|```/g,'').trim());
+    pendingVQ = p;
+    panel.innerHTML = `<div class="review-head">🍇 ${w.vintage} vintage rating</div>
+      <div class="vq-rating vq-${(p.rating||'').toLowerCase()}">${p.rating||'\u2014'}</div>
+      <div class="review-rat" style="font-style:normal;border:none;padding-top:4px">${p.note||''}</div>
+      <div style="display:flex;gap:8px;margin-top:11px">
+        <button class="btn-primary" type="button" style="flex:1;margin:0" onclick="applyVQ()">Apply</button>
+        <button class="btn-secondary" type="button" style="flex:1" onclick="dismissVQ()">Dismiss</button>
+      </div>`;
+  }catch(e){ panel.innerHTML='<div class="review-err">Could not check: '+e.message+'</div>'; }
+}
+function applyVQ(){
+  if(pendingVQ && pendingVQ.rating){ formVintageQuality = {rating:pendingVQ.rating, note:pendingVQ.note||'', checkedAt:new Date().toISOString().slice(0,10)}; renderVQBadge(); }
+  dismissVQ();
+}
+function dismissVQ(){ const p=document.getElementById('vintage-panel'); if(p){ p.style.display='none'; p.innerHTML=''; } pendingVQ=null; }
+
+// ── AI MARKET VALUE RESEARCH (uses live web search) ─────────────────
+function renderValueBadge(){
+  const el = document.getElementById('value-existing'); if(!el) return;
+  el.textContent = formValueEstimate ? `Current: $${formValueEstimate.low}\u2013$${formValueEstimate.high} (${formValueEstimate.confidence} confidence) \u2014 checked ${formValueEstimate.checkedAt}` : '';
+}
+async function sharedFetchValue(w){
+  const apiKey = lsGet('cellar_api_key');
+  const resp = await fetch('https://api.anthropic.com/v1/messages',{
+    method:'POST',
+    headers:{'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+    body:JSON.stringify({
+      model:'claude-sonnet-5', max_tokens:1200,
+      tools:[{type:'web_search_20250305',name:'web_search'}],
+      messages:[{role:'user',content:`Use web search to find the current retail price in USD for this specific wine and vintage: ${JSON.stringify(w)}. Check retailer sites (Wine.com, Total Wine, K&L Wine Merchants, or the winery directly). If you find this exact vintage, use it; if you can only find nearby vintages, say so and lower your confidence accordingly. Give a realistic LOW-HIGH retail price range for a single 750ml bottle (not auction or collector pricing unless this genuinely is a rare/allocated wine). Return ONLY JSON, no markdown: {"low":number,"high":number,"confidence":"High|Medium|Low","note":"1 short sentence on what you found and why your confidence is at that level","source":"retailer or site name if found, else empty string"}`}]
+    })
+  });
+  const data = await resp.json();
+  if(data.error) throw new Error(data.error.message);
+  const text = data.content.filter(x=>x.type==='text').map(x=>x.text).join('').trim();
+  const p = JSON.parse(text.replace(/```json|```/g,'').trim());
+  p.low = Number(p.low)||0; p.high = Number(p.high)||0;
+  return p;
+}
+async function researchValue(){
+  const apiKey = lsGet('cellar_api_key');
+  const panel = document.getElementById('value-panel');
+  if(!apiKey){ panel.style.display='block'; panel.innerHTML='<div class="review-err">Add your Anthropic API key in Settings ⚙ to use this.</div>'; return; }
+  if(!_v('f-name')){ panel.style.display='block'; panel.innerHTML='<div class="review-err">Enter the wine name first.</div>'; return; }
+  panel.style.display='block';
+  panel.innerHTML='<div class="review-loading"><div class="spinner"></div> Searching for current prices…</div>';
+  const w={name:_v('f-name'),vintage:_v('f-vintage'),region:_v('f-region'),country:_v('f-country'),grape:_v('f-grape')};
+  try{
+    const p = await sharedFetchValue(w);
+    pendingValue = p;
+    panel.innerHTML = `<div class="review-head">💰 Estimated value</div>
+      <div class="value-range">$${p.low} – $${p.high}</div>
+      <div class="value-conf conf-${(p.confidence||'').toLowerCase()}">${p.confidence||'—'} confidence${p.source?' · '+p.source:''}</div>
+      <div class="review-rat" style="font-style:normal;border:none;padding-top:6px">${p.note||''}</div>
+      <div style="display:flex;gap:8px;margin-top:11px">
+        <button class="btn-primary" type="button" style="flex:1;margin:0" onclick="applyValue()">Apply</button>
+        <button class="btn-secondary" type="button" style="flex:1" onclick="dismissValue()">Dismiss</button>
+      </div>`;
+  }catch(e){ panel.innerHTML='<div class="review-err">Could not research: '+e.message+'</div>'; }
+}
+
+// ── BULK VALUE REFRESH ────────────────────────────────────────────────
+let bulkRunning = false, bulkCancel = false;
+function setBulkButtonState(running){
+  const btn = document.getElementById('bulk-value-btn');
+  if(btn) btn.textContent = running ? '⏹ Stop refreshing' : '🔄 Refresh all values';
+}
+function refreshValueOverview(){
+  const s = computeStats();
+  const fig = document.getElementById('cellar-value-figure');
+  const sub = document.getElementById('cellar-value-sub');
+  if(fig) fig.textContent = s.pricedCount ? '$'+Math.round(s.totalValueMid).toLocaleString() : '—';
+  if(sub) sub.textContent = `${s.pricedCount} of ${s.totalWines} wines priced` + (s.pricedCount<s.totalWines ? ' — tap Refresh all values below, or research one wine at a time from its entry.' : '');
+}
+function bulkEstimateToggle(){ if(bulkRunning){ bulkCancel = true; } else { bulkEstimateAll(); } }
+async function bulkEstimateAll(){
+  const apiKey = lsGet('cellar_api_key');
+  const prog = document.getElementById('bulk-value-progress');
+  if(!apiKey){ if(prog) prog.innerHTML='<div class="review-err">Add your Anthropic API key in Settings ⚙ first.</div>'; return; }
+  if(bulkRunning) return;
+  bulkRunning = true; bulkCancel = false;
+  setBulkButtonState(true);
+  const targets = wines.filter(w=>totalQty(w)>0);
+  let done=0, failed=0;
+  for(let i=0;i<targets.length;i++){
+    if(bulkCancel) break;
+    const w = targets[i];
+    if(prog) prog.innerHTML = `<div class="review-loading"><div class="spinner"></div> Estimating ${i+1} / ${targets.length}: ${w.name}</div>`;
+    try{
+      const p = await sharedFetchValue({name:w.name, vintage:w.vintage, region:w.region, country:w.country, grape:w.grape});
+      w.valueEstimate = {low:p.low, high:p.high, confidence:p.confidence||'', note:p.note||'', source:p.source||'', checkedAt:new Date().toISOString().slice(0,10)};
+      save(); done++;
+    }catch(e){ failed++; }
+    if(i%3===0 || i===targets.length-1){ renderList(); refreshValueOverview(); }
+  }
+  bulkRunning = false;
+  setBulkButtonState(false);
+  renderList(); refreshValueOverview();
+  const s = computeStats();
+  if(prog){
+    prog.innerHTML = bulkCancel
+      ? `<div style="color:var(--text2);font-size:.82rem">Stopped after ${done+failed} wines (${done} priced). ${s.pricedCount} of ${s.totalWines} total priced.</div>`
+      : `<div style="color:var(--text2);font-size:.82rem">Done — ${s.pricedCount} of ${s.totalWines} wines priced${failed? ` (${failed} couldn’t be found)`:''}. Estimated cellar value: $${Math.round(s.totalValueMid).toLocaleString()}.</div>`;
+  }
+}
+function applyValue(){
+  if(pendingValue){ formValueEstimate = {low:pendingValue.low, high:pendingValue.high, confidence:pendingValue.confidence||'', note:pendingValue.note||'', source:pendingValue.source||'', checkedAt:new Date().toISOString().slice(0,10)}; renderValueBadge(); }
+  dismissValue();
+}
+function dismissValue(){ const p=document.getElementById('value-panel'); if(p){ p.style.display='none'; p.innerHTML=''; } pendingValue=null; }
+
+// ── TASTING JOURNAL ──────────────────────────────────────────────────
+function openJournalFromForm(){
+  if(editId==null) return;
+  const w = wines.find(x=>x.id===editId); if(!w) return;
+  closeForm();
+  setTimeout(()=>openJournalSheet(w), 250);
+}
+function openJournalSheet(w){
+  journalWine = w; journalRating = 5;
+  document.getElementById('journal-wine-name').textContent = `${w.name}${w.vintage?' '+w.vintage:''}`;
+  document.getElementById('j-date').value = new Date().toISOString().slice(0,10);
+  document.getElementById('j-notes').value = '';
+  renderStars();
+  const availLocs = LOCS.filter(l=>(w.locations[l]||0)>0);
+  const locSel = document.getElementById('j-location');
+  locSel.innerHTML = availLocs.map(l=>`<option value="${l}">${l} (${w.locations[l]})</option>`).join('');
+  document.getElementById('j-decrement').checked = true;
+  document.getElementById('j-decrement-wrap').style.display = availLocs.length ? 'block' : 'none';
+  openSheet('journal');
+}
+function closeJournalSheet(){ closeSheet('journal'); journalWine=null; }
+function renderStars(){
+  const el = document.getElementById('star-picker'); if(!el) return;
+  el.innerHTML = [1,2,3,4,5].map(n=>`<span class="star ${n<=journalRating?'on':''}" onclick="setStars(${n})">\u2605</span>`).join('');
+}
+function setStars(n){ journalRating=n; renderStars(); }
+function saveJournalEntry(){
+  if(!journalWine) return;
+  const date = document.getElementById('j-date').value || new Date().toISOString().slice(0,10);
+  const notes = document.getElementById('j-notes').value.trim();
+  const entry = {id:Date.now(), wineId:journalWine.id, wineName:journalWine.name, vintage:journalWine.vintage, date, rating:journalRating, notes};
+  journal.push(entry); saveJournal();
+  const dec = document.getElementById('j-decrement');
+  if(dec && dec.checked){
+    const loc = document.getElementById('j-location').value;
+    const w = wines.find(x=>x.id===journalWine.id);
+    if(w && loc && (w.locations[loc]||0)>0){ w.locations[loc]--; save(); }
+  }
+  closeJournalSheet();
+  renderList(); renderReadyNow();
+}
+function deleteJournalEntry(id){
+  if(!confirm('Delete this tasting entry?')) return;
+  journal = journal.filter(e=>e.id!==id);
+  saveJournal();
+  renderJournalScreen();
+}
+function renderJournalScreen(){
+  const body = document.getElementById('journal-body');
+  const entries = [...journal].sort((a,b)=> b.date.localeCompare(a.date) || b.id-a.id);
+  if(!entries.length){ body.innerHTML = `<div class="empty-state"><div class="icon">📝</div><p>No tastings logged yet \u2014 open a wine and tap "Log a tasting" to start your journal.</p></div>`; return; }
+  body.innerHTML = entries.map(e=>{
+    const stars = '\u2605'.repeat(e.rating) + '\u2606'.repeat(5-e.rating);
+    return `<div class="journal-card">
+      <div class="journal-top"><span class="journal-wine">${e.wineName}${e.vintage?` <span class="pair-vint">${e.vintage}</span>`:''}</span><button class="photo-del" onclick="deleteJournalEntry(${e.id});event.stopPropagation()">\u2715</button></div>
+      <div class="journal-meta"><span class="journal-stars">${stars}</span><span class="journal-date">${e.date}</span></div>
+      ${e.notes?`<div class="journal-notes">${e.notes}</div>`:''}
+    </div>`;
+  }).join('');
+}
+
+// ── CELLAR STATS ──────────────────────────────────────────────────────
+function computeStats(){
+  const active = wines.filter(w=>totalQty(w)>0);
+  const totalBottles = active.reduce((s,w)=>s+totalQty(w),0);
+  const byType = {}; TYPES.forEach(t=>byType[t]=0);
+  active.forEach(w=>{ byType[w.type]=(byType[w.type]||0)+totalQty(w); });
+  const byLoc = {}; LOCS.forEach(l=>byLoc[l]=0);
+  active.forEach(w=>{ LOCS.forEach(l=>byLoc[l]+=(w.locations[l]||0)); });
+  const byWindow = {}; GROUPS.forEach(g=>byWindow[g.l]=0);
+  active.forEach(w=>{ const g=GROUPS.find(x=>x.t(w.optimal)); if(g) byWindow[g.l]+=totalQty(w); });
+  const byRegion = {};
+  active.forEach(w=>{ const r=w.region||'\u2014'; byRegion[r]=(byRegion[r]||0)+totalQty(w); });
+  const topRegions = Object.entries(byRegion).sort((a,b)=>b[1]-a[1]).slice(0,6);
+  let pricedCount=0, totalValueMid=0;
+  active.forEach(w=>{ if(w.valueEstimate){ pricedCount++; totalValueMid += ((w.valueEstimate.low+w.valueEstimate.high)/2)*totalQty(w); } });
+  return {totalBottles, totalWines:active.length, byType, byLoc, byWindow, topRegions, pricedCount, totalValueMid};
+}
+function barsHTML(obj){
+  const entries = Array.isArray(obj) ? obj : Object.entries(obj);
+  const filtered = entries.filter(e=>e[1]>0);
+  const max = Math.max(1, ...filtered.map(e=>e[1]));
+  return filtered.map(([label,val])=>{
+    const pct = Math.round(val/max*100);
+    return `<div class="stat-bar-row"><div class="stat-bar-label">${label}</div><div class="stat-bar-track"><div class="stat-bar-fill" style="width:${pct}%"></div></div><div class="stat-bar-val">${val}</div></div>`;
+  }).join('') || '<div style="color:var(--text3);font-size:.8rem">No data yet.</div>';
+}
+function renderStatsScreen(){
+  const s = computeStats();
+  const body = document.getElementById('stats-body');
+  let html = '';
+  html += `<div class="settings-section"><span class="settings-section-label">Overview</span>
+    <div class="settings-item"><div class="stat-overview-row"><b>${s.totalWines}</b> wines \u00b7 <b>${s.totalBottles}</b> bottles</div></div>
+    <div class="settings-item">
+      <div style="color:var(--text2);font-size:.8rem">Estimated cellar value</div>
+      <div id="cellar-value-figure" style="font-size:1.6rem;color:var(--gold3);margin-top:4px">${s.pricedCount? '$'+Math.round(s.totalValueMid).toLocaleString() : '\u2014'}</div>
+      <div id="cellar-value-sub" style="font-size:.72rem;color:var(--text3);margin-top:4px">${s.pricedCount} of ${s.totalWines} wines priced${s.pricedCount<s.totalWines?' \u2014 tap Refresh all values below, or research one wine at a time from its entry.':''}</div>
+      <button class="btn-review" type="button" id="bulk-value-btn" onclick="bulkEstimateToggle()" style="margin-top:10px;width:100%">🔄 Refresh all values</button>
+      <div id="bulk-value-progress" style="margin-top:8px"></div>
+    </div>
+  </div>`;
+  html += `<div class="settings-section"><span class="settings-section-label">By Type</span><div class="settings-item">${barsHTML(s.byType)}</div></div>`;
+  html += `<div class="settings-section"><span class="settings-section-label">By Location</span><div class="settings-item">${barsHTML(s.byLoc)}</div></div>`;
+  html += `<div class="settings-section"><span class="settings-section-label">Drink Window</span><div class="settings-item">${barsHTML(s.byWindow)}</div></div>`;
+  html += `<div class="settings-section"><span class="settings-section-label">Top Regions</span><div class="settings-item">${barsHTML(s.topRegions)}</div></div>`;
+  html += discoverHTML();
+  body.innerHTML = html;
+}
+
+// ── FILL THE GAPS: what should I buy next ────────────────────────────
+const DEFAULT_DISCOVER_PREF = "I'm especially drawn to medium-bodied, earthy/mineral reds like A to Z Pinot Noir or Nerello Mascalese.";
+function loadDiscoverPref(){ try{ const s=lsGet('cellar_discover_pref'); return (s!=null && s!=='') ? s : DEFAULT_DISCOVER_PREF; }catch(e){ return DEFAULT_DISCOVER_PREF; } }
+function computeGaps(){
+  const active = wines.filter(w=>totalQty(w)>0);
+  const ready = w => { const l=status(w.optimal).l; return l==='OPEN NOW' || l==='DRINK SOON'; };
+  const sweetReady = active.filter(w=>w.type==='Fortified/Dessert' && ready(w));
+  const whiteReady = active.filter(w=>w.type==='White' && ready(w));
+  const sparkling = active.filter(w=>w.type==='Sparkling');
+  return {
+    sweetWines: sweetReady.length, sweetBottles: sweetReady.reduce((s,w)=>s+totalQty(w),0),
+    whiteWines: whiteReady.length, whiteBottles: whiteReady.reduce((s,w)=>s+totalQty(w),0),
+    sparklingWines: sparkling.length, sparklingBottles: sparkling.reduce((s,w)=>s+totalQty(w),0),
+  };
+}
+function discoverHTML(){
+  const g = computeGaps();
+  const pref = loadDiscoverPref();
+  return `<div class="settings-section">
+    <span class="settings-section-label">What Should I Buy Next?</span>
+    <div class="settings-item">
+      <div class="gap-line">🍯 Ready-to-drink sweet/dessert: <b>${g.sweetBottles}</b> bottle${g.sweetBottles!==1?'s':''}</div>
+      <div class="gap-line">🥂 Ready-to-drink whites: <b>${g.whiteBottles}</b> bottle${g.whiteBottles!==1?'s':''}</div>
+      <div class="gap-line">✨ Sparkling on hand: <b>${g.sparklingBottles}</b> bottle${g.sparklingBottles!==1?'s':''}</div>
+    </div>
+    <div class="settings-item">
+      <label style="display:block;font-size:.72rem;color:var(--text3);margin-bottom:6px;letter-spacing:.08em">What are you after?</label>
+      <textarea class="form-textarea" id="discover-pref" style="min-height:66px">${pref}</textarea>
+    </div>
+    <button class="btn-review" type="button" onclick="findBottles()">🧭 Find bottles at Total Wine &amp; Wegmans (Leesburg, VA)</button>
+    <div id="discover-results" style="margin-top:12px"></div>
+  </div>`;
+}
+async function findBottles(){
+  const apiKey = lsGet('cellar_api_key');
+  const out = document.getElementById('discover-results');
+  if(!apiKey){ out.innerHTML='<div class="review-err">Add your Anthropic API key in Settings ⚙ to use this.</div>'; return; }
+  const prefEl = document.getElementById('discover-pref');
+  const pref = (prefEl?prefEl.value:'').trim() || DEFAULT_DISCOVER_PREF;
+  lsSet('cellar_discover_pref', pref);
+  out.innerHTML = '<div class="review-loading"><div class="spinner"></div> Searching Total Wine \u0026 Wegmans in Leesburg, VA…</div>';
+  const g = computeGaps();
+  const owned = wines.filter(w=>totalQty(w)>0).map(w=>({name:w.name,type:w.type,grape:w.grape,region:w.region,country:w.country}));
+  try{
+    const resp = await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+      body:JSON.stringify({
+        model:'claude-sonnet-5', max_tokens:1600,
+        tools:[{type:'web_search_20250305',name:'web_search'}],
+        messages:[{role:'user',content:`You are a wine shop advisor helping someone round out their home cellar. Search specifically for wines currently available at Total Wine & More and Wegmans, both in or near Leesburg, Virginia (Loudoun County). Use web search to find real, current products from totalwine.com and wegmans.com (their wine department) — do not invent products.
+Their cellar gaps (auto-detected from their inventory): ${JSON.stringify(g)}. Their stated taste: "${pref}".
+What they already own (avoid recommending near-duplicates of these): ${JSON.stringify(owned)}.
+Recommend 6-10 specific real bottles across these categories as relevant: sparkling wine, ready-to-drink white wine, ready-to-drink sweet/dessert wine, and medium-bodied earthy/mineral reds (e.g. Pinot Noir, Nerello Mascalese, similar styles) matching their taste. Prioritize whichever categories have the biggest gaps. For each, note the store (Total Wine or Wegmans) and an approximate price if you found one.
+Return ONLY a JSON array, no markdown: [{"name":"exact product name","store":"Total Wine or Wegmans","price":"approx price string or empty","category":"Sparkling|Ready-to-Drink White|Ready-to-Drink Sweet|Earthy Mineral Red|Other","reason":"1 sentence why it fits"}]`}]
+      })
+    });
+    const data = await resp.json();
+    if(data.error){ out.innerHTML='<div class="review-err">API error: '+data.error.message+'</div>'; return; }
+    const text = data.content.filter(x=>x.type==='text').map(x=>x.text).join('').trim();
+    const recs = JSON.parse(text.replace(/```json|```/g,'').trim());
+    if(!Array.isArray(recs)||!recs.length){ out.innerHTML='<div class="review-err">No matches found. Try adjusting what you\'re after.</div>'; return; }
+    const order = ['Sparkling','Ready-to-Drink White','Ready-to-Drink Sweet','Earthy Mineral Red','Other'];
+    const groups = {};
+    recs.forEach(r=>{ const c=r.category||'Other'; (groups[c]=groups[c]||[]).push(r); });
+    let html = '';
+    order.forEach(cat=>{
+      const items = groups[cat]; if(!items||!items.length) return;
+      html += `<div class="discover-cat">${cat}</div>`;
+      items.forEach(r=>{
+        html += `<div class="discover-rec">
+          <div class="discover-rec-name">${r.name}</div>
+          <div class="discover-rec-meta"><span class="discover-store">${r.store||''}</span>${r.price?` · ${r.price}`:''}</div>
+          <div class="discover-rec-reason">${r.reason||''}</div>
+        </div>`;
+      });
+    });
+    out.innerHTML = html;
+  }catch(e){ out.innerHTML = '<div class="review-err">Could not search: '+e.message+'</div>'; }
+}
+
 // ── INIT ────────────────────────────────────────────────────────────
 try { load(); } catch(e) { wines = DEFAULT_WINES.map(w=>({...w,locations:{...w.locations}})); }
+try { loadJournal(); } catch(e) { journal = []; }
 if(!wines || wines.length===0){ wines = DEFAULT_WINES.map(w=>({...w,locations:{...w.locations}})); }
 try { renderList(); } catch(e) { document.getElementById('wine-list').innerHTML='<div class="empty-state"><div class="icon">⚠️</div><p>Load error: '+e.message+'</p></div>'; }
+try { renderReadyNow(); } catch(e) {}
 try { applyCover(); } catch(e) {}
 </script>
 </body>
