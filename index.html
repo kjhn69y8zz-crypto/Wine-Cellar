@@ -335,6 +335,7 @@ body{ background:transparent !important; }
 .conf-high{ background:#1f3a1a; color:#8fce7a; border:1px solid #3a5a2e; }
 .conf-medium{ background:#2a2410; color:#d9c97a; border:1px solid #5a4a1e; }
 .conf-low{ background:#2a1e10; color:#d9a97a; border:1px solid #5a3a1e; }
+.conf-manual{ background:#22303c; color:#a8c4d8; border:1px solid #3a4d5a; }
 
 .value-range{ font-size:1.3rem; color:var(--gold3); margin-top:2px; }
 .value-conf{ font-size:.72rem; margin-top:2px; padding:2px 8px; border-radius:8px; display:inline-block; }
@@ -563,7 +564,12 @@ body{ background:transparent !important; }
       <div class="review-panel" id="vintage-panel" style="display:none"></div>
     </div>
     <div class="form-field">
-      <button class="btn-review" type="button" onclick="researchValue()">💰 Research market value</button>
+      <label class="form-label">Estimated Value ($)</label>
+      <div class="form-row">
+        <input class="form-input" type="number" id="f-value-low" placeholder="Low" min="0" step="0.01">
+        <input class="form-input" type="number" id="f-value-high" placeholder="High" min="0" step="0.01">
+      </div>
+      <button class="btn-review" type="button" onclick="researchValue()" style="margin-top:8px">💰 Research market value</button>
       <div class="current-tag" id="value-existing"></div>
       <div class="review-panel" id="value-panel" style="display:none"></div>
     </div>
@@ -1250,6 +1256,16 @@ async function saveWine(){
   if(!total){ alert('Please add at least 1 bottle in a location.'); return; }
   const locs = {}; LOCS.forEach((l,i)=>{ locs[l]=formQtys[i]; });
   const id = editId||nextId++;
+  const lowRaw = document.getElementById('f-value-low').value;
+  const highRaw = document.getElementById('f-value-high').value;
+  const lowNum = parseFloat(lowRaw), highNum = parseFloat(highRaw);
+  let valueEstimate = null;
+  if(!isNaN(lowNum) || !isNaN(highNum)){
+    const low = !isNaN(lowNum) ? lowNum : highNum;
+    const high = !isNaN(highNum) ? highNum : lowNum;
+    const matchesAi = formValueEstimate && formValueEstimate.low===low && formValueEstimate.high===high;
+    valueEstimate = matchesAi ? {...formValueEstimate} : {low, high, confidence:'Manual', note:'Manually entered', source:'', checkedAt:new Date().toISOString().slice(0,10)};
+  }
   const w = {
     id, name,
     type:document.getElementById('f-type').value,
@@ -1263,7 +1279,7 @@ async function saveWine(){
     optimal:parseInt(document.getElementById('f-optimal').value)||2028,
     note:document.getElementById('f-note').value.trim(),
     vintageQuality: formVintageQuality || null,
-    valueEstimate: formValueEstimate || null,
+    valueEstimate,
   };
   if(editId){ wines[wines.findIndex(x=>x.id===editId)]=w; }
   else { wines.push(w); }
@@ -1531,6 +1547,9 @@ function dismissVQ(){ const p=document.getElementById('vintage-panel'); if(p){ p
 function renderValueBadge(){
   const el = document.getElementById('value-existing'); if(!el) return;
   el.textContent = formValueEstimate ? `Current: $${formValueEstimate.low}\u2013$${formValueEstimate.high} (${formValueEstimate.confidence} confidence) \u2014 checked ${formValueEstimate.checkedAt}` : '';
+  const lo = document.getElementById('f-value-low'), hi = document.getElementById('f-value-high');
+  if(lo) lo.value = formValueEstimate ? formValueEstimate.low : '';
+  if(hi) hi.value = formValueEstimate ? formValueEstimate.high : '';
 }
 async function sharedFetchValue(w){
   const apiKey = lsGet('cellar_api_key');
