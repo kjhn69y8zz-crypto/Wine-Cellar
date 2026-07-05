@@ -430,6 +430,11 @@ body{ background:transparent !important; }
         <label>Total bottles in collection</label>
         <div style="font-size:1.2rem;color:var(--gold3);font-weight:600;margin-top:4px" id="settings-total"></div>
       </div>
+      <div class="settings-item">
+        <label>Start fresh on this device</label>
+        <div style="font-size:.76rem;color:var(--text3);margin:2px 0 8px">Clears all wines, journal entries, and photos stored on THIS phone only. Other devices are not affected. This cannot be undone.</div>
+        <button class="btn-danger" onclick="resetAllData()">Reset My Data</button>
+      </div>
     </div>
     <div class="settings-section">
       <span class="settings-section-label">Appearance</span>
@@ -740,86 +745,6 @@ const GROUPS = [
 ];
 
 const DEFAULT_WINES = [
-  {id:1,name:"Quinta das Carvalhas 20yr Tawny",appellation:"Douro",vintage:"NV",type:"Fortified/Dessert",country:"Portugal",region:"Douro",grape:"Tawny Port blend",locations:{"Cellar":1,"Chiller":0,"Kitchen":0},window:"Now",optimal:2026,note:"Ready on release. Refrigerate after opening."},
-  {id:2,name:"Breaux Cabernet Franc",appellation:"Virginia",vintage:"2019",type:"Red",country:"USA",region:"Virginia",grape:"Cabernet Franc",locations:{"Cellar":0,"Chiller":0,"Kitchen":1},window:"2025–2032",optimal:2026,note:"Two bottles at apartment. Drink soon."},
-  {id:3,name:"Cooper's Hawk Lux Pinot Noir",appellation:"California",vintage:"Current",type:"Red",country:"USA",region:"California",grape:"Pinot Noir",locations:{"Cellar":0,"Chiller":0,"Kitchen":3},window:"Now–2028",optimal:2027,note:"Wine club tier. Fruit-forward, drink while vibrant."},
-  {id:4,name:"Cooper's Hawk Global Cuvée",appellation:"California",vintage:"Current",type:"Red",country:"USA",region:"California",grape:"Red blend",locations:{"Cellar":0,"Chiller":1,"Kitchen":0},window:"Now–2028",optimal:2027,note:"Accessible red blend. Not built for extended cellaring."},
-  {id:5,name:"Vinsacro Dioro",appellation:"Rioja, Spain",vintage:"2019",type:"Red",country:"Spain",region:"Rioja",grape:"Tempranillo blend",locations:{"Cellar":2,"Chiller":0,"Kitchen":0},window:"2022–2032",optimal:2029,note:"Drinking well now. Don't delay much longer."},
-  {id:6,name:"Breaux 'The Quarter'",appellation:"Virginia",vintage:"2022",type:"Red",country:"USA",region:"Virginia",grape:"Red blend",locations:{"Cellar":1,"Chiller":0,"Kitchen":0},window:"2025–2029",optimal:2027,note:"Entry-level blend. Drink first among Virginia reds."},
-  {id:7,name:"Breaux Meritage",appellation:"Virginia",vintage:"2020",type:"Red",country:"USA",region:"Virginia",grape:"Bordeaux blend",locations:{"Cellar":1,"Chiller":0,"Kitchen":0},window:"2026–2030",optimal:2027,note:"Gold at 2025 Governor's Cup."},
-  {id:8,name:"Marqués de Riscal Reserva",appellation:"Rioja, Spain",vintage:"2022",type:"Red",country:"Spain",region:"Rioja",grape:"Tempranillo",locations:{"Cellar":1,"Chiller":0,"Kitchen":0},window:"2026–2029",optimal:2027,note:"24 months American oak."},
-  {id:9,name:"Ruffino Chianti Riserva Ducale Tan",appellation:"Tuscany, Italy",vintage:"2021",type:"Red",country:"Italy",region:"Tuscany",grape:"Sangiovese",locations:{"Cellar":2,"Chiller":0,"Kitchen":0},window:"2024–2031",optimal:2028,note:"Classic Tan label Riserva. Best 3–5 years from vintage."},
-  {id:10,name:"Heitz Cellar Cab Sauv",appellation:"Napa Valley, CA",vintage:"2019",type:"Red",country:"USA",region:"Napa Valley",grape:"Cabernet Sauvignon",locations:{"Cellar":1,"Chiller":0,"Kitchen":0},window:"2025–2035",optimal:2028,note:"First vintage post-sale. Transitional style."},
-  {id:11,name:"Maria's Legacy Cab",appellation:"California",vintage:"2022",type:"Red",country:"USA",region:"California",grape:"Cabernet Sauvignon",locations:{"Cellar":2,"Chiller":1,"Kitchen":0},window:"2025–2033",optimal:2028,note:"Drink-friendly style, best in 2–4 years."},
-  {id:12,name:"Ch Tronquoy Lalande",appellation:"St-Estèphe, Bordeaux",vintage:"2015",type:"Red",country:"France",region:"Bordeaux",grape:"Cabernet Sauvignon blend",locations:{"Cellar":1,"Chiller":0,"Kitchen":0},window:"Now–2030",optimal:2028,note:"Outstanding 2015 vintage. In window now."},
-  {id:13,name:"Spier 21 Gables Cab",appellation:"Stellenbosch, South Africa",vintage:"2020",type:"Red",country:"South Africa",region:"Stellenbosch",grape:"Cabernet Sauvignon",locations:{"Cellar":1,"Chiller":0,"Kitchen":0},window:"2024–2033",optimal:2028,note:"Solid structure, not a 20-year wine."},
-  {id:14,name:"Barboursville Octagon",appellation:"Virginia",vintage:"2021",type:"Red",country:"USA",region:"Virginia",grape:"Bordeaux blend",locations:{"Cellar":4,"Chiller":0,"Kitchen":0},window:"2027–2033",optimal:2029,note:"Virginia's most acclaimed red. 92pts WE."},
-  {id:15,name:"868 Estate Cab Franc",appellation:"Loudoun County, VA",vintage:"2023",type:"Red",country:"USA",region:"Virginia",grape:"Cabernet Franc",locations:{"Cellar":1,"Chiller":0,"Kitchen":0},window:"2026–2032",optimal:2029,note:"Award-winning Loudoun Cab Franc."},
-  {id:16,name:"The Barns Hamilton Station Cab Franc",appellation:"Virginia",vintage:"2023",type:"Red",country:"USA",region:"Virginia",grape:"Cabernet Franc",locations:{"Cellar":1,"Chiller":1,"Kitchen":0},window:"2026–2032",optimal:2029,note:"Decant 45 mins when opening."},
-  {id:17,name:"Cana Le Mariage",appellation:"Middleburg, Virginia",vintage:"2019",type:"Red",country:"USA",region:"Virginia",grape:"Red blend",locations:{"Cellar":1,"Chiller":0,"Kitchen":0},window:"2026–2034",optimal:2027,note:"Gold 2022 Governor's Cup. Best Virginia bottle."},
-  {id:18,name:"Lost Mountain Rendezvous",appellation:"Virginia",vintage:"2023",type:"Red",country:"USA",region:"Virginia",grape:"Red blend",locations:{"Cellar":3,"Chiller":0,"Kitchen":0},window:"2026–2031",optimal:2032,note:"Approachable Virginia blend."},
-  {id:19,name:"Mascota Unanime Signature",appellation:"Mendoza, Argentina",vintage:"2019",type:"Red",country:"Argentina",region:"Mendoza",grape:"Bordeaux blend",locations:{"Cellar":1,"Chiller":0,"Kitchen":0},window:"2023–2035",optimal:2029,note:"6 years old — nicely on track."},
-  {id:20,name:"Dr. Loosen Blue Slate Kabinett",appellation:"Mosel, Germany",vintage:"2024",type:"White",country:"Germany",region:"Mosel",grape:"Riesling",locations:{"Cellar":1,"Chiller":0,"Kitchen":0},window:"2026–2035",optimal:2030,note:"Brand new — will develop beautifully over 4–6 years."},
-  {id:21,name:"Good Spirit Farm Cab Franc Reserve",appellation:"Loudoun County, VA",vintage:"2022",type:"Red",country:"USA",region:"Virginia",grape:"Cabernet Franc",locations:{"Cellar":1,"Chiller":0,"Kitchen":0},window:"2027–2033",optimal:2030,note:"Award-winning Reserve. Hold 2+ more years."},
-  {id:22,name:"Ch Quinault L'Enclos",appellation:"St-Émilion Grand Cru Classé",vintage:"2018",type:"Red",country:"France",region:"Bordeaux",grape:"Merlot blend",locations:{"Cellar":2,"Chiller":0,"Kitchen":0},window:"2023–2036",optimal:2030,note:"Merlot-dominant. More approachable than Médoc."},
-  {id:23,name:"Ch Labégorce",appellation:"Margaux, Bordeaux",vintage:"2018",type:"Red",country:"France",region:"Bordeaux",grape:"Cabernet Sauvignon blend",locations:{"Cellar":2,"Chiller":0,"Kitchen":0},window:"2024–2038",optimal:2030,note:"Legendary 2018 vintage. Patience rewarded."},
-  {id:24,name:"Ch Cantemerle",appellation:"Haut-Médoc Grand Cru Classé",vintage:"2016",type:"Red",country:"France",region:"Bordeaux",grape:"Cabernet Sauvignon blend",locations:{"Cellar":1,"Chiller":0,"Kitchen":0},window:"2026–2034",optimal:2030,note:"5th Growth in excellent vintage. Great value."},
-  {id:25,name:"Chrysalis Norton Barrel Select",appellation:"Virginia",vintage:"2022",type:"Red",country:"USA",region:"Virginia",grape:"Norton",locations:{"Cellar":0,"Chiller":5,"Kitchen":0},window:"2027–2033",optimal:2030,note:"Below Locksley Reserve tier."},
-  {id:26,name:"Hillsborough Petit Verdot Vintners Selection",appellation:"Virginia",vintage:"2022",type:"Red",country:"USA",region:"Virginia",grape:"Petit Verdot",locations:{"Cellar":2,"Chiller":0,"Kitchen":0},window:"2027–2033",optimal:2030,note:"Gold at 2025 Governor's Cup."},
-  {id:27,name:"Covalli Barbaresco",appellation:"Piedmont, Italy",vintage:"2020",type:"Red",country:"Italy",region:"Piedmont",grape:"Nebbiolo",locations:{"Cellar":1,"Chiller":0,"Kitchen":0},window:"2026–2034",optimal:2030,note:"92pts Suckling. Barbaresco before Barolo."},
-  {id:28,name:"Clos des Confidences",appellation:"St-Émilion Grand Cru",vintage:"2020",type:"Red",country:"France",region:"Bordeaux",grape:"Merlot blend",locations:{"Cellar":1,"Chiller":0,"Kitchen":0},window:"2027–2034",optimal:2030,note:"Cyril Gouy. Excellent 2020 Right Bank."},
-  {id:29,name:"Jordan Cab Sauv",appellation:"Alexander Valley, CA",vintage:"2021",type:"Red",country:"USA",region:"Sonoma",grape:"Cabernet Sauvignon",locations:{"Cellar":2,"Chiller":0,"Kitchen":0},window:"2027–2034",optimal:2030,note:"Elegant, Bordeaux-style Sonoma Cab."},
-  {id:30,name:"The Barns Hamilton Station Meritage",appellation:"Virginia",vintage:"2023",type:"Red",country:"USA",region:"Virginia",grape:"Bordeaux blend",locations:{"Cellar":1,"Chiller":0,"Kitchen":0},window:"2027–2033",optimal:2030,note:"Well-regarded Loudoun producer."},
-  {id:31,name:"Courtney Benham Reserve Napa",appellation:"Napa Valley, CA",vintage:"2022",type:"Red",country:"USA",region:"Napa Valley",grape:"Cabernet Sauvignon",locations:{"Cellar":1,"Chiller":0,"Kitchen":0},window:"2025–2035",optimal:2030,note:"24.6 Brix, pH 3.65. 95 barrels. Hold 2–3 more years."},
-  {id:32,name:"Ch Lamarque",appellation:"Haut-Médoc, Bordeaux",vintage:"2022",type:"Red",country:"France",region:"Bordeaux",grape:"Cabernet Sauvignon blend",locations:{"Cellar":1,"Chiller":0,"Kitchen":0},window:"2028–2034",optimal:2031,note:"Consistent Cru Bourgeois."},
-  {id:33,name:"Halos de Jupiter CDP",appellation:"Châteauneuf-du-Pape",vintage:"2022",type:"Red",country:"France",region:"Rhône",grape:"Grenache blend",locations:{"Cellar":1,"Chiller":0,"Kitchen":0},window:"2028–2035",optimal:2031,note:"93pts on label. Good 2022 vintage."},
-  {id:34,name:"Ch Fleur Cardinale",appellation:"St-Émilion Grand Cru Classé",vintage:"2020",type:"Red",country:"France",region:"Bordeaux",grape:"Merlot blend",locations:{"Cellar":1,"Chiller":0,"Kitchen":0},window:"2028–2035",optimal:2031,note:"Excellent 2020 Right Bank vintage."},
-  {id:35,name:"Renieri Chianti Classico Gran Selezione",appellation:"Tuscany, Italy",vintage:"2022",type:"Red",country:"Italy",region:"Tuscany",grape:"Sangiovese",locations:{"Cellar":1,"Chiller":0,"Kitchen":0},window:"2028–2035",optimal:2031,note:"94pts Suckling. Top tier Chianti."},
-  {id:36,name:"St Giorgio Brunello di Montalcino",appellation:"Tuscany, Italy",vintage:"2020",type:"Red",country:"Italy",region:"Tuscany",grape:"Sangiovese",locations:{"Cellar":1,"Chiller":0,"Kitchen":0},window:"2028–2036",optimal:2031,note:"Good value Brunello entry point."},
-  {id:37,name:"La Petite Tour CDP",appellation:"Châteauneuf-du-Pape",vintage:"2023",type:"Red",country:"France",region:"Rhône",grape:"Grenache blend",locations:{"Cellar":1,"Chiller":1,"Kitchen":0},window:"2027–2035",optimal:2031,note:"92pts Wegmans rated. Great value CDP."},
-  {id:38,name:"The Barns Hamilton Station Petit Verdot",appellation:"Virginia",vintage:"2023",type:"Red",country:"USA",region:"Virginia",grape:"Petit Verdot",locations:{"Cellar":1,"Chiller":0,"Kitchen":0},window:"2027–2034",optimal:2031,note:"Virginia does Petit Verdot exceptionally well."},
-  {id:39,name:"868 Estate Meritage",appellation:"Virginia",vintage:"2023",type:"Red",country:"USA",region:"Virginia",grape:"Bordeaux blend",locations:{"Cellar":1,"Chiller":0,"Kitchen":0},window:"2028–2034",optimal:2031,note:"Gold at 2025 Governor's Cup."},
-  {id:40,name:"Hillsborough Ruby",appellation:"Virginia",vintage:"2022",type:"Red",country:"USA",region:"Virginia",grape:"Red blend",locations:{"Cellar":2,"Chiller":0,"Kitchen":0},window:"2027–2035",optimal:2031,note:"Tannat, Fer Servadou, Petit Verdot. 24mo French oak."},
-  {id:41,name:"Ch Belgrave",appellation:"Haut-Médoc Grand Cru Classé",vintage:"2019",type:"Red",country:"France",region:"Bordeaux",grape:"Cabernet Sauvignon blend",locations:{"Cellar":1,"Chiller":0,"Kitchen":0},window:"2027–2039",optimal:2032,note:"5th Growth. Outstanding 2019 vintage."},
-  {id:42,name:"Covalli Barolo",appellation:"Piedmont, Italy",vintage:"2019",type:"Red",country:"Italy",region:"Piedmont",grape:"Nebbiolo",locations:{"Cellar":2,"Chiller":0,"Kitchen":0},window:"2028–2038",optimal:2032,note:"Commercial style but solid 2019 structure."},
-  {id:43,name:"Mauro Veglio Barolo Gattera",appellation:"La Morra, Piedmont",vintage:"2020",type:"Red",country:"Italy",region:"Piedmont",grape:"Nebbiolo",locations:{"Cellar":1,"Chiller":0,"Kitchen":0},window:"2028–2037",optimal:2032,note:"Respected La Morra cru. Modern style."},
-  {id:44,name:"Paola Lanzavecchia Calice Barolo 2016",appellation:"Piedmont, Italy",vintage:"2016",type:"Red",country:"Italy",region:"Piedmont",grape:"Nebbiolo",locations:{"Cellar":2,"Chiller":0,"Kitchen":0},window:"2026–2038",optimal:2032,note:"Legendary 2016 vintage. Two bottles — compare side by side."},
-  {id:45,name:"Paola Lanzavecchia Calice Barolo 2020",appellation:"Piedmont, Italy",vintage:"2020",type:"Red",country:"Italy",region:"Piedmont",grape:"Nebbiolo",locations:{"Cellar":1,"Chiller":0,"Kitchen":0},window:"2028–2037",optimal:2032,note:"Compare against the 2016 when both hit 2032."},
-  {id:46,name:"Chrysalis Norton Locksley Reserve",appellation:"Virginia",vintage:"2021",type:"Red",country:"USA",region:"Virginia",grape:"Norton",locations:{"Cellar":4,"Chiller":0,"Kitchen":0},window:"2028–2036",optimal:2032,note:"Best Norton at 2026 Governor's Cup. Flagship Virginia bottle."},
-  {id:47,name:"Martin Ray Santa Cruz Mtns Cab",appellation:"Santa Cruz Mountains, CA",vintage:"2022",type:"Red",country:"USA",region:"California",grape:"Cabernet Sauvignon",locations:{"Cellar":1,"Chiller":0,"Kitchen":0},window:"2027–2040",optimal:2032,note:"Don't touch for 3+ more years."},
-  {id:48,name:"Canvasback Red Mountain Cab",appellation:"Red Mountain, WA",vintage:"2022",type:"Red",country:"USA",region:"Washington",grape:"Cabernet Sauvignon",locations:{"Cellar":2,"Chiller":1,"Kitchen":0},window:"2026–2040",optimal:2032,note:"Red Mountain structure needs serious time."},
-  {id:49,name:"Ch Suduiraut Sauternes",appellation:"Sauternes, Bordeaux",vintage:"2016",type:"Fortified/Dessert",country:"France",region:"Bordeaux",grape:"Sémillon blend",locations:{"Cellar":1,"Chiller":0,"Kitchen":0},window:"2022–2045",optimal:2032,note:"Very good Sauternes vintage."},
-  {id:50,name:"Ch La Confession",appellation:"St-Émilion Grand Cru",vintage:"2020",type:"Red",country:"France",region:"Bordeaux",grape:"Merlot blend",locations:{"Cellar":1,"Chiller":0,"Kitchen":0},window:"2028–2042",optimal:2033,note:"7–9 years minimum. Among best cellar wines."},
-  {id:51,name:"Ch Tronquoy",appellation:"St-Estèphe, Bordeaux",vintage:"2022",type:"Red",country:"France",region:"Bordeaux",grape:"Cabernet Sauvignon blend",locations:{"Cellar":1,"Chiller":0,"Kitchen":0},window:"2029–2038",optimal:2033,note:"Very young. St-Estèphe needs time."},
-  {id:52,name:"Ch Canon La Gaffelière",appellation:"St-Émilion Premier Grand Cru Classé",vintage:"2019",type:"Red",country:"France",region:"Bordeaux",grape:"Merlot blend",locations:{"Cellar":1,"Chiller":0,"Kitchen":0},window:"2028–2040",optimal:2034,note:"Crown jewel of the collection. Comtes von Neipperg."},
-  {id:53,name:"Massolino Barolo Serralunga",appellation:"Serralunga d'Alba, Piedmont",vintage:"2019",type:"Red",country:"Italy",region:"Piedmont",grape:"Nebbiolo",locations:{"Cellar":2,"Chiller":0,"Kitchen":0},window:"2028–2040",optimal:2034,note:"Most structured Barolo in the cellar. Serralunga doesn't rush."},
-  {id:54,name:"Hillsborough Ruby Nights",appellation:"Virginia",vintage:"2023",type:"Red",country:"USA",region:"Virginia",grape:"Red blend",locations:{"Cellar":3,"Chiller":0,"Kitchen":0},window:"2030–2040",optimal:2034,note:"20th Anniversary Reserve. 30yr potential. Don't open before 2030."},
-  {id:55,name:"Breaux Nebbiolo",appellation:"Virginia",vintage:"2019",type:"Red",country:"USA",region:"Virginia",grape:"Nebbiolo",locations:{"Cellar":3,"Chiller":0,"Kitchen":0},window:"2027–2039",optimal:2035,note:"2010 bottle confirmed still stunning at 16 years."},
-  {id:56,name:"Chrysalis Hollin Reserve Nebbiolo",appellation:"Virginia",vintage:"2020",type:"Red",country:"USA",region:"Virginia",grape:"Nebbiolo",locations:{"Cellar":3,"Chiller":1,"Kitchen":0},window:"2029–2038",optimal:2035,note:"Single vineyard. Virginia Nebbiolo surprises."},
-  {id:57,name:"Ch Lafaurie-Peyraguey Sauternes",appellation:"Sauternes, Bordeaux",vintage:"2018",type:"Fortified/Dessert",country:"France",region:"Bordeaux",grape:"Sémillon blend",locations:{"Cellar":1,"Chiller":0,"Kitchen":0},window:"2024–2050",optimal:2035,note:"More powerful than Suduiraut — give it more time."},
-  {id:58,name:"Dr. Loosen Erdener Treppchen Auslese",appellation:"Mosel, Germany",vintage:"2020",type:"White",country:"Germany",region:"Mosel",grape:"Riesling",locations:{"Cellar":3,"Chiller":0,"Kitchen":0},window:"2025–2055",optimal:2036,note:"Just entering its window. Built for decades."},
-  {id:59,name:"Breaux Nebbiolo",appellation:"Virginia",vintage:"2020",type:"Red",country:"USA",region:"Virginia",grape:"Nebbiolo",locations:{"Cellar":1,"Chiller":0,"Kitchen":0},window:"2028–2040",optimal:2036,note:"16-year aging curve confirmed. Longest-hold Virginia red."},
-  {id:60,name:"2020 Chrysalis Petit Verdot Reserve",appellation:"Virginia, United States",vintage:"2020",type:"Red",country:"USA",region:"Virginia",grape:"Petit Verdot",locations:{"Cellar":0,"Chiller":2,"Kitchen":0},window:"2026–2035",optimal:2026,note:""},
-  {id:61,name:"Piper-Heidsieck Vintage",appellation:"Champagne, France",vintage:"2015",type:"Sparkling",country:"France",region:"Champagne",grape:"Champagne blend",locations:{"Cellar":3,"Chiller":0,"Kitchen":0},window:"2023–2030",optimal:2027,note:""},
-  {id:62,name:"Pio Cesare Barolo",appellation:"Piedmont, Italy",vintage:"2020",type:"Red",country:"Italy",region:"Piedmont",grape:"Nebbiolo",locations:{"Cellar":1,"Chiller":0,"Kitchen":0},window:"2026–2035",optimal:2031,note:""},
-  {id:63,name:"Château Soutard",appellation:"Saint-Emilion Grand Cru, Bordeaux, France",vintage:"2018",type:"Red",country:"France",region:"Bordeaux",grape:"Merlot blend",locations:{"Cellar":2,"Chiller":0,"Kitchen":0},window:"2025–2040",optimal:2032,note:""},
-  {id:64,name:"Olarra Clásico Reserva",appellation:"Rioja, Spain",vintage:"2018",type:"Red",country:"Spain",region:"Rioja",grape:"Tempranillo blend",locations:{"Cellar":1,"Chiller":0,"Kitchen":0},window:"2025–2035",optimal:2028,note:""},
-  {id:65,name:"Domaine Grand Venneur Le Miocène",appellation:"Châteauneuf-du-Pape, France",vintage:"2023",type:"Red",country:"France",region:"Rhône",grape:"Grenache blend",locations:{"Cellar":2,"Chiller":0,"Kitchen":0},window:"2026–2035",optimal:2030,note:""},
-  {id:66,name:"2024 Kirkland Châteauneuf-du-Pape Cuvée",appellation:"Châteauneuf-du-Pape, Rhône Valley, France",vintage:"2024",type:"Red",country:"France",region:"Rhône",grape:"Grenache blend",locations:{"Cellar":1,"Chiller":4,"Kitchen":0},window:"2027–2035",optimal:2030,note:""},
-  {id:67,name:"Justin Cabernet Sauvignon",appellation:"Paso Robles, California, USA",vintage:"2022",type:"Red",country:"USA",region:"Paso Robles",grape:"Cabernet Sauvignon",locations:{"Cellar":0,"Chiller":0,"Kitchen":1},window:"2025–2032",optimal:2027,note:""},
-  {id:68,name:"Coopers Hawk Camille Festive",appellation:"California",vintage:"2022",type:"Red",country:"USA",region:"California",grape:"Cabernet Sauvignon",locations:{"Cellar":0,"Chiller":0,"Kitchen":1},window:"2024–2025",optimal:2027,note:""},
-  {id:69,name:"Onyx Tannat",appellation:"Hillsborough Vineyards, Virginia, USA",vintage:"2020",type:"Red",country:"USA",region:"Virginia",grape:"Tannat",locations:{"Cellar":1,"Chiller":0,"Kitchen":0},window:"2024–2028",optimal:2030,note:""},
-  {id:70,name:"Santenay Grand Clos Rousseau Chevaliers de l'Arquebuse",appellation:"Santenay Premier Cru, Burgundy, France",vintage:"2022",type:"Red",country:"France",region:"Burgundy",grape:"Pinot Noir",locations:{"Cellar":2,"Chiller":0,"Kitchen":0},window:"2026–2035",optimal:2030,note:""},
-  {id:71,name:"Barboursville Vineyards Virginia Viognier Reserve",appellation:"Barboursville, Virginia, USA",vintage:"2024",type:"White",country:"USA",region:"Virginia",grape:"Viognier",locations:{"Cellar":0,"Chiller":0,"Kitchen":1},window:"2025–2028",optimal:2026,note:""},
-  {id:72,name:"Opal Petit Manseng",appellation:"Hillsborough Vineyards, Virginia, USA",vintage:"2024",type:"White",country:"USA",region:"Virginia",grape:"Petit Manseng",locations:{"Cellar":0,"Chiller":0,"Kitchen":1},window:"2024–2028",optimal:2026,note:""},
-  {id:73,name:"Santenay Grand Clos Rousseau Chevaliers de l'Arquebuse",appellation:"Santenay Premier Cru, Burgundy, France",vintage:"2022",type:"Red",country:"France",region:"Burgundy",grape:"Pinot Noir",locations:{"Cellar":2,"Chiller":0,"Kitchen":0},window:"2025–2032",optimal:2029,note:""},
-  {id:74,name:"Gelida Brut Gran Reserva",appellation:"Comtats de Barcelona, Spain",vintage:"2019",type:"Sparkling",country:"Spain",region:"Catalonia",grape:"Cava blend",locations:{"Cellar":0,"Chiller":1,"Kitchen":0},window:"2023–2026",optimal:2026,note:""},
-  {id:75,name:"Carlo Revello & Figli Barolo",appellation:"Barolo, Piedmont, Italy",vintage:"2021",type:"Red",country:"Italy",region:"Piedmont",grape:"Nebbiolo",locations:{"Cellar":1,"Chiller":0,"Kitchen":0},window:"2026–2035",optimal:2035,note:""},
-  {id:76,name:"Rully 1er Cru Les Deux Terres",appellation:"Rully, Burgundy, France",vintage:"2024",type:"White",country:"France",region:"Burgundy",grape:"Chardonnay",locations:{"Cellar":1,"Chiller":0,"Kitchen":0},window:"2025–2032",optimal:2030,note:""},
-  {id:77,name:"Chrysalis Vineyard Norton",appellation:"Norton, Virginia, USA",vintage:"2021",type:"Red",country:"USA",region:"Virginia",grape:"Norton",locations:{"Cellar":0,"Chiller":1,"Kitchen":0},window:"2024–2030",optimal:2026,note:""},
-  {id:78,name:"Vinum Vita Est Barolo",appellation:"Barolo, Piedmont, Italy",vintage:"2017",type:"Red",country:"Italy",region:"Piedmont",grape:"Nebbiolo",locations:{"Cellar":1,"Chiller":0,"Kitchen":0},window:"2025–2035",optimal:2027,note:""},
-  {id:79,name:"Coopers Hawk Old Vine Zin",appellation:"California, USA",vintage:"Current",type:"Red",country:"USA",region:"California",grape:"Zinfandel",locations:{"Cellar":0,"Chiller":0,"Kitchen":1},window:"2025–2032",optimal:2028,note:""},
-  {id:80,name:"Rutherford Reputation Cabernet Sauvignon",appellation:"Napa Valley, USA",vintage:"2024",type:"Red",country:"USA",region:"Napa Valley",grape:"Cabernet Sauvignon",locations:{"Cellar":1,"Chiller":0,"Kitchen":0},window:"2027–2035",optimal:2029,note:""},
 ];
 
 // ── STATE ───────────────────────────────────────────────────────────
@@ -1047,7 +972,11 @@ function renderList(){
   renderStats();
   const data=filteredWines();
   const list=document.getElementById('wine-list');
-  if(!data.length){ list.innerHTML=`<div class="empty-state"><div class="icon">🍷</div><p>No wines match these filters</p></div>`; return; }
+  if(!data.length){
+    const noFilters = !filters.type && !filters.country && !filters.region && !filters.grape && !filters.Location && !(document.getElementById('search')?.value);
+    const msg = noFilters ? 'No wines yet — tap the + button to add your first bottle' : 'No wines match these filters';
+    list.innerHTML=`<div class="empty-state"><div class="icon">🍷</div><p>${msg}</p></div>`; return;
+  }
   let html='';
   if(sortBy==='name'){
     const s=[...data].sort((a,b)=>a.name.localeCompare(b.name));
@@ -1327,6 +1256,25 @@ function exportCSV(){
   const a = document.createElement('a');
   a.href = 'data:text/csv;charset=utf-8,'+encodeURIComponent(csv);
   a.download = 'wine_cellar.csv'; a.click();
+}
+
+async function resetAllData(){
+  if(!confirm('This will permanently delete all wines, tasting journal entries, and wine photos stored on THIS device. Your saved API key and background photo will be kept. This cannot be undone. Continue?')) return;
+  try{ localStorage.removeItem('cellar_mobile_v3'); }catch(e){}
+  try{ localStorage.removeItem('cellar_journal_v1'); }catch(e){}
+  try{
+    const db = await photoDB();
+    await new Promise((res)=>{
+      const store = db.transaction('photos','readwrite').objectStore('photos');
+      const req = store.getAllKeys();
+      req.onsuccess = ()=>{
+        (req.result||[]).forEach(k=>{ if(k !== 'app_bg') store.delete(k); });
+        res();
+      };
+      req.onerror = ()=>res();
+    });
+  }catch(e){}
+  location.reload();
 }
 
 // ── COVER PHOTO (IndexedDB, same store) ─────────────────────────────
