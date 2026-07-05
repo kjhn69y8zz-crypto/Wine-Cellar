@@ -872,6 +872,29 @@ function save(){ lsSet('cellar_mobile_v3', JSON.stringify(wines)); }
 function loadJournal(){ try{ const s=lsGet('cellar_journal_v1'); journal = s? JSON.parse(s) : []; }catch(e){ journal=[]; } }
 function saveJournal(){ lsSet('cellar_journal_v1', JSON.stringify(journal)); }
 
+// Resilient parsing for AI responses: strips code fences, and if the model's
+// output got cut off or has stray text around it, tries to recover the
+// JSON object/array instead of throwing a raw "Unterminated string" error.
+function extractJson(text){
+  let t = String(text||'').replace(/```json|```/g,'').trim();
+  try{ return JSON.parse(t); }catch(e){}
+  const firstArr = t.indexOf('[');
+  const firstObj = t.indexOf('{');
+  let start = -1;
+  if(firstArr>=0 && (firstObj<0 || firstArr<firstObj)) start = firstArr;
+  else if(firstObj>=0) start = firstObj;
+  if(start>=0){
+    const opening = t[start];
+    const closing = opening==='[' ? ']' : '}';
+    const lastClose = t.lastIndexOf(closing);
+    if(lastClose>start){
+      const candidate = t.slice(start, lastClose+1);
+      try{ return JSON.parse(candidate); }catch(e){}
+    }
+  }
+  throw new Error('The AI response was incomplete or malformed — please try again.');
+}
+
 function status(o){
   const y = o - 2026;
   if(y<=1) return{bg:'var(--red)',t:'var(--red-t)',l:'OPEN NOW'};
@@ -1064,7 +1087,7 @@ async function handlePhoto(event){
         headers:{'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
         body:JSON.stringify({
           model:'claude-haiku-4-5-20251001',
-          max_tokens:700,
+          max_tokens:800,
           messages:[{role:'user',content:[
             {type:'image',source:{type:'base64',media_type:mediaType,data:b64}},
             {type:'text',text:`Analyze this wine bottle label. Return ONLY a JSON object with these exact fields:
@@ -1087,7 +1110,7 @@ Return ONLY the JSON, no markdown, no explanation.`}
       overlay.classList.remove('show');
       if(data.error){ showScanError('API error: '+data.error.message); document.getElementById('scan-manual-btn').style.display='block'; return; }
       const text = data.content.filter(x=>x.type==='text').map(x=>x.text).join('').trim();
-      const parsed = JSON.parse(text.replace(/```json|```/g,'').trim());
+      const parsed = extractJson(text);
       scanData = parsed;
       document.getElementById('sr-name').textContent = parsed.name || '—';
       document.getElementById('sr-type').textContent = parsed.type || '—';
@@ -1407,14 +1430,14 @@ async function reviewWindow(){
       method:'POST',
       headers:{'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
       body:JSON.stringify({
-        model:'claude-sonnet-5', max_tokens:700,
+        model:'claude-sonnet-5', max_tokens:900,
         messages:[{role:'user',content:`You are a Master Sommelier assessing optimal cellaring. The current year is 2026. Assess this wine and give an UPDATED optimal drinking year and drinking window, considering the vintage, grape/varietal, region, style, and typical aging curve. Wine details: ${JSON.stringify(w)}. If the owner's current estimate looks good, you may confirm it. Return ONLY a JSON object, no markdown: {"optimal": <integer year>, "window": "YYYY\u2013YYYY", "rationale": "1-2 sentence explanation"}`}]
       })
     });
     const data=await resp.json();
     if(data.error){ panel.innerHTML='<div class="review-err">API error: '+data.error.message+'</div>'; return; }
     const text=data.content.filter(x=>x.type==='text').map(x=>x.text).join('').trim();
-    const p=JSON.parse(text.replace(/```json|```/g,'').trim());
+    const p=extractJson(text);
     reviewSuggestion=p;
     panel.innerHTML=`<div class="review-head">🔮 Claude's suggestion</div>
       <div class="review-row">Optimal year: <b>${p.optimal||'—'}</b> <span class="review-old">· yours: ${w.currentOptimal||'—'}</span></div>
@@ -1442,14 +1465,14 @@ async function aiTasting(){
       method:'POST',
       headers:{'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
       body:JSON.stringify({
-        model:'claude-sonnet-5', max_tokens:800,
+        model:'claude-sonnet-5', max_tokens:1100,
         messages:[{role:'user',content:`You are a Master Sommelier. For this specific wine, give a concise tasting note and 3-4 food pairings. Wine: ${JSON.stringify(w)}. Return ONLY a JSON object, no markdown: {"tasting":"2-3 sentence tasting note covering aromas, palate and structure","pairings":["dish 1","dish 2","dish 3"]}`}]
       })
     });
     const data=await resp.json();
     if(data.error){ panel.innerHTML='<div class="review-err">API error: '+data.error.message+'</div>'; return; }
     const text=data.content.filter(x=>x.type==='text').map(x=>x.text).join('').trim();
-    const p=JSON.parse(text.replace(/```json|```/g,'').trim());
+    const p=extractJson(text);
     tastingResult=p;
     panel.innerHTML=`<div class="review-head">🍷 Tasting notes</div>
       <div class="review-rat" style="font-style:normal;border:none;padding-top:0;margin-top:4px">${p.tasting||''}</div>
@@ -1494,14 +1517,14 @@ async function pairMeal(){
       method:'POST',
       headers:{'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
       body:JSON.stringify({
-        model:'claude-sonnet-5', max_tokens:900,
+        model:'claude-sonnet-5', max_tokens:1600,
         messages:[{role:'user',content:`You are a Master Sommelier choosing from one person's actual cellar. They told you what they're in the mood for — this could be a specific dish, a general craving, an occasion, the weather, or just a feeling (e.g. "something to sip on a hot day", "cozy night in", "celebrating", or a specific meal like "grilled ribeye"). What they said: "${meal}". Cellar inventory (JSON array): ${JSON.stringify(candidates)}. Recommend the best 1-3 wines FROM THIS LIST ONLY, best first, favoring wines that are ready to drink when it makes sense. Base the recommendation on whatever is most relevant to their input — food pairing only if they mentioned food, otherwise weather, mood, occasion, or style as appropriate. Use the exact "name" values from the list. Return ONLY a JSON array, no markdown: [{"name":"exact name from list","vintage":"vintage from list","reason":"1-2 sentence reason it fits what they asked for"}]`}]
       })
     });
     const data=await resp.json();
     if(data.error){ out.innerHTML='<div class="review-err">API error: '+data.error.message+'</div>'; return; }
     const text=data.content.filter(x=>x.type==='text').map(x=>x.text).join('').trim();
-    const recs=JSON.parse(text.replace(/```json|```/g,'').trim());
+    const recs=extractJson(text);
     if(!Array.isArray(recs)||!recs.length){ out.innerHTML='<div class="review-err">No match found. Try rephrasing the meal.</div>'; return; }
     let html='<div class="review-head" style="margin-bottom:10px">🍷 From your cellar</div>';
     recs.forEach((r,i)=>{
@@ -1563,14 +1586,14 @@ async function checkVintageQuality(){
       method:'POST',
       headers:{'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
       body:JSON.stringify({
-        model:'claude-sonnet-5', max_tokens:500,
+        model:'claude-sonnet-5', max_tokens:700,
         messages:[{role:'user',content:`You are a Master Sommelier. Assess the QUALITY OF THIS VINTAGE for this wine's region and style \u2014 how good a growing/making year it was, based on general knowledge of that region's conditions that year. Wine: ${JSON.stringify(w)}. Return ONLY JSON, no markdown: {"rating":"Excellent|Great|Good|Average|Developing","note":"1 sentence on what made the vintage that way"}`}]
       })
     });
     const data = await resp.json();
     if(data.error){ panel.innerHTML='<div class="review-err">API error: '+data.error.message+'</div>'; return; }
     const text = data.content.filter(x=>x.type==='text').map(x=>x.text).join('').trim();
-    const p = JSON.parse(text.replace(/```json|```/g,'').trim());
+    const p = extractJson(text);
     pendingVQ = p;
     panel.innerHTML = `<div class="review-head">🍇 ${w.vintage} vintage rating</div>
       <div class="vq-rating vq-${(p.rating||'').toLowerCase()}">${p.rating||'\u2014'}</div>
@@ -1601,7 +1624,7 @@ async function sharedFetchValue(w){
     method:'POST',
     headers:{'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
     body:JSON.stringify({
-      model:'claude-sonnet-5', max_tokens:1200,
+      model:'claude-sonnet-5', max_tokens:1800,
       tools:[{type:'web_search_20250305',name:'web_search'}],
       messages:[{role:'user',content:`Use web search to find the current retail price in USD for this specific wine and vintage: ${JSON.stringify(w)}. Check retailer sites (Wine.com, Total Wine, K&L Wine Merchants, or the winery directly). If you find this exact vintage, use it; if you can only find nearby vintages, say so and lower your confidence accordingly. Give a realistic LOW-HIGH retail price range for a single 750ml bottle (not auction or collector pricing unless this genuinely is a rare/allocated wine). Return ONLY JSON, no markdown: {"low":number,"high":number,"confidence":"High|Medium|Low","note":"1 short sentence on what you found and why your confidence is at that level","source":"retailer or site name if found, else empty string"}`}]
     })
@@ -1609,7 +1632,7 @@ async function sharedFetchValue(w){
   const data = await resp.json();
   if(data.error) throw new Error(data.error.message);
   const text = data.content.filter(x=>x.type==='text').map(x=>x.text).join('').trim();
-  const p = JSON.parse(text.replace(/```json|```/g,'').trim());
+  const p = extractJson(text);
   p.low = Number(p.low)||0; p.high = Number(p.high)||0;
   return p;
 }
@@ -1842,7 +1865,7 @@ async function findBottles(){
       method:'POST',
       headers:{'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
       body:JSON.stringify({
-        model:'claude-sonnet-5', max_tokens:1600,
+        model:'claude-sonnet-5', max_tokens:2200,
         tools:[{type:'web_search_20250305',name:'web_search'}],
         messages:[{role:'user',content:`You are a wine shop advisor helping someone round out their home cellar. Search specifically for wines currently available at Total Wine & More and Wegmans, both in or near Leesburg, Virginia (Loudoun County). Use web search to find real, current products from totalwine.com and wegmans.com (their wine department) — do not invent products.
 Their cellar gaps (auto-detected from their inventory): ${JSON.stringify(g)}. Their stated taste: "${pref}".
@@ -1854,7 +1877,7 @@ Return ONLY a JSON array, no markdown: [{"name":"exact product name","store":"To
     const data = await resp.json();
     if(data.error){ out.innerHTML='<div class="review-err">API error: '+data.error.message+'</div>'; return; }
     const text = data.content.filter(x=>x.type==='text').map(x=>x.text).join('').trim();
-    const recs = JSON.parse(text.replace(/```json|```/g,'').trim());
+    const recs = extractJson(text);
     if(!Array.isArray(recs)||!recs.length){ out.innerHTML='<div class="review-err">No matches found. Try adjusting what you\'re after.</div>'; return; }
     const order = ['Sparkling','Ready-to-Drink White','Ready-to-Drink Sweet','Earthy Mineral Red','Other'];
     const groups = {};
