@@ -8,9 +8,9 @@
 <title>Wine Cellar</title>
 <style>
 :root {
-  --bg:#070a0d; --bg2:#0f141a; --bg3:#182029; --bg4:#22303c;
-  --gold:#7ba0bd; --gold2:#a8c4d8; --gold3:#eef3f6;
-  --text:#eef2f5; --text2:#9fb0bd; --text3:#6b7c88; --text4:#4a5761;
+  --bg:#0d1218; --bg2:#141b22; --bg3:#1c2830; --bg4:#26343e;
+  --gold:#4fa3d1; --gold2:#7ec4e8; --gold3:#ffffff;
+  --text:#eef4f8; --text2:#c3d2da; --text3:#8fa6b8; --text4:#5f7688;
   --red:#dc2626; --red-t:#fca5a5;
   --orange:#ea580c; --orange-t:#fdba74;
   --amber:#d97706; --amber-t:#fcd34d;
@@ -37,7 +37,7 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
   border-bottom:1px solid #2e3b46;
   flex-shrink:0;
 }
-.app-header h1 { font-size:1.5rem; font-weight:400; color:#f5e6c8; letter-spacing:.03em; }
+.app-header h1 { font-size:1.5rem; font-weight:400; color:var(--text); letter-spacing:.03em; }
 .app-header .subtitle { font-size:.72rem; color:var(--text3); letter-spacing:.15em; text-transform:uppercase; margin-bottom:4px; }
 .stats-row { display:flex; gap:12px; margin-top:8px; flex-wrap:wrap; }
 .stat-chip { background:var(--bg4); border:1px solid #2e3b46; border-radius:20px; padding:3px 10px; font-size:.72rem; color:var(--text2); }
@@ -79,7 +79,7 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
 }
 .wine-card:active { background:var(--bg3); transform:scale(.98); }
 .wine-card-left { flex:1; min-width:0; }
-.wine-name { font-size:.95rem; font-weight:500; color:#f0e4cc; line-height:1.3; margin-bottom:2px; }
+.wine-name { font-size:.95rem; font-weight:500; color:var(--text); line-height:1.3; margin-bottom:2px; }
 .wine-region { font-size:.72rem; color:var(--text3); margin-bottom:6px; }
 .wine-meta { display:flex; flex-wrap:wrap; gap:4px; align-items:center; }
 .vintage-badge { font-size:.7rem; color:var(--text2); font-style:italic; }
@@ -254,7 +254,6 @@ body{ background:transparent !important; }
 #main-header{ background:linear-gradient(180deg, rgba(10,14,18,.18), rgba(8,11,15,.55)) !important; }
 .filter-bar{ background:rgba(15,10,5,.82); -webkit-backdrop-filter:blur(3px); backdrop-filter:blur(3px); }
 #screen-settings{ background:linear-gradient(180deg, rgba(7,10,13,.94), rgba(7,10,13,.97)); }
-.wine-card{ background:rgba(22,16,9,.92) !important; }
 .dropdown-row{ display:flex; gap:8px; padding:2px 12px 8px; }
 .menu-select{ flex:1; min-width:0; background:var(--bg4); color:var(--text); border:1px solid #2e3b46; border-radius:10px; padding:10px 30px 10px 12px; font-family:inherit; font-size:.82rem; -webkit-appearance:none; appearance:none;
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%237ba0bd' fill='none' stroke-width='1.5'/%3E%3C/svg%3E");
@@ -266,7 +265,8 @@ body{ background:transparent !important; }
 <style>
 /* more transparent cards so the barrel room shows through */
 #app-bg{ background:linear-gradient(180deg, rgba(7,10,13,.18) 0%, rgba(7,10,13,.42) 45%, rgba(7,10,13,.64) 100%), var(--barrel) center/cover no-repeat; }
-.wine-card{ background:rgba(14,19,24,.44) !important; -webkit-backdrop-filter:blur(8px); backdrop-filter:blur(8px); border:1px solid rgba(140,165,185,.30) !important; }
+.wine-card{ background:rgba(13,18,24,.20) !important; -webkit-backdrop-filter:blur(10px); backdrop-filter:blur(10px); border:1px solid rgba(140,165,185,.30) !important; }
+.wine-card, .ready-card, .pair-rec, .discover-rec, .journal-card { text-shadow:0 1px 3px rgba(0,0,0,.7); }
 .filter-bar{ background:rgba(10,14,18,.5) !important; }
 .group-label.static{ cursor:default; -webkit-backdrop-filter:blur(3px); backdrop-filter:blur(3px); border-radius:6px; }
 /* horizontally scrollable dropdown row */
@@ -278,7 +278,7 @@ body{ background:transparent !important; }
 .pair-btn{ margin-top:12px; width:100%; background:linear-gradient(180deg, rgba(58,74,92,.55), rgba(30,40,52,.55)); border:1px solid #3d4d5a; color:var(--gold3); padding:12px; border-radius:12px; font-family:inherit; font-size:.9rem; letter-spacing:.02em; cursor:pointer; -webkit-backdrop-filter:blur(4px); backdrop-filter:blur(4px); }
 .pair-btn:active{ transform:translateY(1px); }
 /* pairing recommendations */
-.pair-rec{ display:flex; gap:12px; align-items:flex-start; background:rgba(22,16,9,.72); border:1px solid #2e3b46; border-radius:12px; padding:12px; margin-bottom:8px; cursor:pointer; }
+.pair-rec{ display:flex; gap:12px; align-items:flex-start; background:rgba(13,18,24,.20); backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px); border:1px solid #2e3b46; border-radius:12px; padding:12px; margin-bottom:8px; cursor:pointer; }
 .pair-rank{ flex:0 0 auto; width:24px; height:24px; border-radius:50%; background:var(--gold); color:#1a0d00; font-weight:700; font-size:.8rem; display:flex; align-items:center; justify-content:center; margin-top:1px; }
 .pair-rec-name{ color:var(--text); font-size:.95rem; }
 .pair-vint{ color:var(--text2); font-size:.82rem; }
@@ -295,7 +295,7 @@ body{ background:transparent !important; }
 .shuffle-btn{ background:none; border:1px solid #2e3b46; color:var(--text2); border-radius:14px; padding:4px 10px; font-size:.68rem; cursor:pointer; font-family:inherit; }
 .ready-now-row{ display:flex; gap:8px; overflow-x:auto; -webkit-overflow-scrolling:touch; scrollbar-width:none; padding-bottom:2px; }
 .ready-now-row::-webkit-scrollbar{ display:none; }
-.ready-card{ flex:0 0 auto; width:148px; background:rgba(20,14,7,.7); border:1px solid #2e3b46; border-radius:12px; padding:10px; cursor:pointer; -webkit-backdrop-filter:blur(4px); backdrop-filter:blur(4px); }
+.ready-card{ flex:0 0 auto; width:148px; background:rgba(13,18,24,.20); border:1px solid #2e3b46; border-radius:12px; padding:10px; cursor:pointer; -webkit-backdrop-filter:blur(8px); backdrop-filter:blur(8px); }
 .ready-name{ font-size:.8rem; color:var(--text); line-height:1.3; margin-bottom:4px; }
 .ready-sub{ font-size:.66rem; color:var(--text3); }
 .ready-status{ font-size:.64rem; margin-top:5px; letter-spacing:.05em; }
@@ -309,7 +309,7 @@ body{ background:transparent !important; }
 .stat-overview-row{ font-size:.98rem; color:var(--text); }
 
 /* journal */
-.journal-card{ background:rgba(20,14,7,.75); border:1px solid #2e3b46; border-radius:12px; padding:12px; margin-bottom:8px; }
+.journal-card{ background:rgba(13,18,24,.20); backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px); border:1px solid #2e3b46; border-radius:12px; padding:12px; margin-bottom:8px; }
 .journal-top{ display:flex; justify-content:space-between; align-items:flex-start; gap:8px; }
 .journal-wine{ color:var(--text); font-size:.9rem; }
 .journal-meta{ display:flex; gap:10px; margin-top:4px; align-items:center; }
@@ -347,7 +347,7 @@ body{ background:transparent !important; }
 .gap-line b{ color:var(--gold3); }
 .discover-cat{ font-size:.62rem; letter-spacing:.14em; text-transform:uppercase; color:var(--gold); margin:14px 0 6px; }
 .discover-cat:first-child{ margin-top:0; }
-.discover-rec{ background:rgba(20,26,32,.7); border:1px solid #2e3b46; border-radius:10px; padding:11px; margin-bottom:7px; }
+.discover-rec{ background:rgba(13,18,24,.20); backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px); border:1px solid #2e3b46; border-radius:10px; padding:11px; margin-bottom:7px; }
 .discover-rec-name{ color:var(--text); font-size:.88rem; }
 .discover-rec-meta{ font-size:.74rem; margin-top:3px; }
 .discover-store{ color:var(--gold2); }
@@ -372,7 +372,7 @@ body{ background:transparent !important; }
     <h1>My Collection</h1>
     <div class="stats-row" id="stats-row"></div>
     <div class="ready-now" id="ready-now"></div>
-    <button class="pair-btn" onclick="openPair()">🍽️  What should I pour tonight?</button>
+    <button class="pair-btn" onclick="openPair()">What should I pour tonight?</button>
   </div>
   <div class="filter-bar">
     <div class="dropdown-row" id="filter-dropdowns"></div>
