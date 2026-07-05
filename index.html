@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&display=swap" rel="stylesheet">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -33,14 +36,16 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
 /* ── HEADER ──────────────────────────────────────────────────────── */
 .app-header {
   background:linear-gradient(180deg,#0c1116 0%,#141c24 100%);
-  padding:52px 16px 12px;
+  padding:72px 16px 12px;
   border-bottom:1px solid #2e3b46;
   flex-shrink:0;
 }
 .app-header h1 { font-size:1.5rem; font-weight:400; color:var(--text); letter-spacing:.03em; }
-.app-header .subtitle { font-size:.72rem; color:var(--text3); letter-spacing:.15em; text-transform:uppercase; margin-bottom:4px; }
+.crest-wrap{ margin-bottom:2px; }
+.crest-icon{ color:var(--gold3); opacity:.9; filter:drop-shadow(0 2px 8px rgba(0,0,0,.8)); }
+.app-header .subtitle { font-family:'Cormorant Garamond', Georgia, serif; font-weight:700; font-size:3.4rem; color:var(--gold3); letter-spacing:.04em; text-transform:none; text-shadow:0 4px 4px rgba(0,0,0,1), 0 2px 20px rgba(0,0,0,1), 0 0 40px rgba(0,0,0,.9), 0 1px 0 rgba(0,0,0,1); line-height:1.05; }
 .stats-row { display:flex; gap:12px; margin-top:8px; flex-wrap:wrap; }
-.stat-chip { background:var(--bg4); border:1px solid #2e3b46; border-radius:20px; padding:3px 10px; font-size:.72rem; color:var(--text2); }
+.stat-chip { background:rgba(13,18,24,.20); -webkit-backdrop-filter:blur(6px); backdrop-filter:blur(6px); border:1px solid #2e3b46; border-radius:20px; padding:3px 10px; font-size:.72rem; color:var(--text2); }
 .stat-chip strong { color:var(--gold3); }
 
 /* ── FILTER BAR ──────────────────────────────────────────────────── */
@@ -55,7 +60,7 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
 .filter-chip { flex-shrink:0; padding:6px 14px; border-radius:20px; font-size:.75rem; letter-spacing:.05em; border:1px solid var(--bg4); background:transparent; color:var(--text3); cursor:pointer; scroll-snap-align:start; transition:all .15s; white-space:nowrap; }
 .filter-chip.active { border-color:var(--gold); background:#2d1f00; color:var(--gold3); }
 .search-row { padding:6px 12px 8px; }
-.search-input { width:100%; background:var(--bg3); border:1px solid var(--bg4); color:var(--text); padding:10px 14px; border-radius:var(--radius-sm); font-size:.9rem; outline:none; font-family:inherit; }
+.search-input { width:100%; background:rgba(13,18,24,.20); -webkit-backdrop-filter:blur(8px); backdrop-filter:blur(8px); border:1px solid var(--bg4); color:var(--text); padding:10px 14px; border-radius:var(--radius-sm); font-size:.9rem; outline:none; font-family:inherit; }
 .search-input::placeholder { color:var(--text4); }
 .search-input:focus { border-color:var(--gold); }
 
@@ -146,11 +151,11 @@ body { background:var(--bg); color:var(--text); font-family:-apple-system,BlinkM
 .qty-btn:active { background:#22303c; }
 .qty-num { min-width:24px; text-align:center; font-size:1rem; color:var(--gold3); font-weight:600; }
 .loc-total { font-size:.72rem; color:var(--text3); text-align:center; padding:8px; font-style:italic; }
-.btn-primary { width:100%; padding:15px; background:linear-gradient(135deg,#5b7c99,#34495e); border:none; color:#fff; border-radius:var(--radius); font-size:1rem; cursor:pointer; font-family:inherit; letter-spacing:.05em; margin-top:4px; }
+.btn-primary { width:100%; padding:15px; background:linear-gradient(135deg, rgba(91,124,153,.35), rgba(52,73,94,.35)); -webkit-backdrop-filter:blur(8px); backdrop-filter:blur(8px); border:1px solid rgba(140,165,185,.30); color:#fff; border-radius:var(--radius); font-size:1rem; cursor:pointer; font-family:inherit; letter-spacing:.05em; margin-top:4px; }
 .btn-primary:active { opacity:.85; }
 .btn-danger { width:100%; padding:12px; background:transparent; border:1px solid #7f1d1d; color:#fca5a5; border-radius:var(--radius); font-size:.85rem; cursor:pointer; font-family:inherit; margin-top:8px; }
 .btn-danger:active { background:#7f1d1d30; }
-.btn-secondary { width:100%; padding:12px; background:var(--bg3); border:1px solid var(--bg4); color:var(--text2); border-radius:var(--radius); font-size:.9rem; cursor:pointer; font-family:inherit; }
+.btn-secondary { width:100%; padding:12px; background:rgba(13,18,24,.20); -webkit-backdrop-filter:blur(8px); backdrop-filter:blur(8px); border:1px solid var(--bg4); color:var(--text2); border-radius:var(--radius); font-size:.9rem; cursor:pointer; font-family:inherit; }
 .btn-secondary:active { background:var(--bg4); }
 
 /* ── ADD CHOICE SHEET ────────────────────────────────────────────── */
@@ -226,8 +231,8 @@ input[type=file] { display:none; }
 /* barrel-room ambiance */
 #main-header{
   background:
-    radial-gradient(130% 100% at 50% -20%, rgba(184,144,26,.16), transparent 62%),
-    linear-gradient(180deg,#2a1400 0%,#160b02 100%);
+    radial-gradient(130% 100% at 50% -20%, rgba(159,212,232,.16), transparent 62%),
+    linear-gradient(180deg,#0c1116 0%,#141c24 100%);
   background-size:cover; background-position:center;
   position:relative; box-shadow:inset 0 -1px 0 #2e3b46, 0 4px 18px rgba(0,0,0,.4);
 }
@@ -235,7 +240,7 @@ input[type=file] { display:none; }
 body{ background:
   radial-gradient(120% 60% at 50% 0%, #170d04 0%, var(--bg) 55%); }
 /* AI review */
-.btn-review{width:100%;background:linear-gradient(180deg,#1c242c,#12181e);border:1px solid #34424e;color:var(--gold3);padding:12px;border-radius:10px;font-family:inherit;font-size:.86rem;cursor:pointer;letter-spacing:.03em}
+.btn-review{width:100%;background:linear-gradient(180deg, rgba(28,36,44,.30), rgba(18,24,30,.30));-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);border:1px solid #34424e;color:var(--gold3);padding:12px;border-radius:10px;font-family:inherit;font-size:.86rem;cursor:pointer;letter-spacing:.03em}
 .btn-review:active{transform:translateY(1px)}
 .review-panel{margin-top:10px;background:var(--bg3);border:1px solid #2e3b46;border-radius:10px;padding:13px}
 .review-loading{display:flex;align-items:center;gap:10px;color:var(--text2);font-size:.85rem}
@@ -251,11 +256,13 @@ body{ background:
 #app-bg{ position:fixed; inset:0; z-index:-1;
   background:linear-gradient(180deg, rgba(8,5,2,.5) 0%, rgba(8,5,2,.82) 45%, rgba(8,5,2,.93) 100%), var(--barrel) center/cover no-repeat; }
 body{ background:transparent !important; }
-#main-header{ background:linear-gradient(180deg, rgba(10,14,18,.18), rgba(8,11,15,.55)) !important; }
-.filter-bar{ background:rgba(15,10,5,.82); -webkit-backdrop-filter:blur(3px); backdrop-filter:blur(3px); }
+#main-header{ background:
+  radial-gradient(60% 60% at 50% 30%, rgba(159,212,232,.32), transparent 70%),
+  linear-gradient(180deg, rgba(10,14,18,.18), rgba(8,11,15,.55)) !important; }
+.filter-bar{ background:rgba(13,18,24,.35); -webkit-backdrop-filter:blur(6px); backdrop-filter:blur(6px); }
 #screen-settings{ background:linear-gradient(180deg, rgba(7,10,13,.94), rgba(7,10,13,.97)); }
 .dropdown-row{ display:flex; gap:8px; padding:2px 12px 8px; }
-.menu-select{ flex:1; min-width:0; background:var(--bg4); color:var(--text); border:1px solid #2e3b46; border-radius:10px; padding:10px 30px 10px 12px; font-family:inherit; font-size:.82rem; -webkit-appearance:none; appearance:none;
+.menu-select{ flex:1; min-width:0; background:rgba(38,52,62,.20); -webkit-backdrop-filter:blur(8px); backdrop-filter:blur(8px); color:var(--text); border:1px solid #2e3b46; border-radius:10px; padding:10px 30px 10px 12px; font-family:inherit; font-size:.82rem; -webkit-appearance:none; appearance:none;
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%237ba0bd' fill='none' stroke-width='1.5'/%3E%3C/svg%3E");
   background-repeat:no-repeat; background-position:right 12px center; }
 .group-label.static{ cursor:default; }
@@ -265,9 +272,9 @@ body{ background:transparent !important; }
 <style>
 /* more transparent cards so the barrel room shows through */
 #app-bg{ background:linear-gradient(180deg, rgba(7,10,13,.18) 0%, rgba(7,10,13,.42) 45%, rgba(7,10,13,.64) 100%), var(--barrel) center/cover no-repeat; }
-.wine-card{ background:rgba(13,18,24,.20) !important; -webkit-backdrop-filter:blur(10px); backdrop-filter:blur(10px); border:1px solid rgba(140,165,185,.30) !important; }
+.wine-card{ background:rgba(13,18,24,.10) !important; -webkit-backdrop-filter:blur(10px); backdrop-filter:blur(10px); border:1px solid rgba(140,165,185,.30) !important; }
 .wine-card, .ready-card, .pair-rec, .discover-rec, .journal-card { text-shadow:0 1px 3px rgba(0,0,0,.7); }
-.filter-bar{ background:rgba(10,14,18,.5) !important; }
+.filter-bar{ background:rgba(13,18,24,.20) !important; }
 .group-label.static{ cursor:default; -webkit-backdrop-filter:blur(3px); backdrop-filter:blur(3px); border-radius:6px; }
 /* horizontally scrollable dropdown row */
 .dropdown-row{ display:flex; gap:8px; overflow-x:auto; padding:2px 12px 10px; -webkit-overflow-scrolling:touch; scrollbar-width:none; }
@@ -275,18 +282,18 @@ body{ background:transparent !important; }
 .dropdown-row .menu-select{ flex:0 0 auto; }
 .clear-chip{ flex:0 0 auto; background:rgba(120,40,40,.4); border:1px solid #6a2020; color:var(--red-t); border-radius:10px; padding:0 14px; font-family:inherit; font-size:.8rem; cursor:pointer; }
 /* pour tonight button */
-.pair-btn{ margin-top:12px; width:100%; background:linear-gradient(180deg, rgba(58,74,92,.55), rgba(30,40,52,.55)); border:1px solid #3d4d5a; color:var(--gold3); padding:12px; border-radius:12px; font-family:inherit; font-size:.9rem; letter-spacing:.02em; cursor:pointer; -webkit-backdrop-filter:blur(4px); backdrop-filter:blur(4px); }
+.pair-btn{ margin-top:12px; width:100%; background:linear-gradient(180deg, rgba(58,74,92,.20), rgba(30,40,52,.20)); border:1px solid #3d4d5a; color:var(--gold3); padding:12px; border-radius:12px; font-family:inherit; font-size:.9rem; letter-spacing:.02em; cursor:pointer; -webkit-backdrop-filter:blur(8px); backdrop-filter:blur(8px); }
 .pair-btn:active{ transform:translateY(1px); }
 /* pairing recommendations */
-.pair-rec{ display:flex; gap:12px; align-items:flex-start; background:rgba(13,18,24,.20); backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px); border:1px solid #2e3b46; border-radius:12px; padding:12px; margin-bottom:8px; cursor:pointer; }
+.pair-rec{ display:flex; gap:12px; align-items:flex-start; background:rgba(13,18,24,.10); backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px); border:1px solid #2e3b46; border-radius:12px; padding:12px; margin-bottom:8px; cursor:pointer; }
 .pair-rank{ flex:0 0 auto; width:24px; height:24px; border-radius:50%; background:var(--gold); color:#1a0d00; font-weight:700; font-size:.8rem; display:flex; align-items:center; justify-content:center; margin-top:1px; }
 .pair-rec-name{ color:var(--text); font-size:.95rem; }
 .pair-vint{ color:var(--text2); font-size:.82rem; }
 .pair-rec-reason{ color:var(--text2); font-size:.83rem; line-height:1.5; margin-top:3px; }
 </style>
 <style>
-.header-nav{ display:flex; gap:8px; flex-wrap:wrap; justify-content:flex-end; }
-.nav-pill{ background:var(--bg4); border:1px solid #2e3b46; color:var(--gold2); padding:7px 12px; border-radius:20px; font-size:.72rem; cursor:pointer; font-family:inherit; letter-spacing:.02em; white-space:nowrap; }
+.header-nav{ display:flex; gap:8px; flex-wrap:wrap; justify-content:flex-start; margin-top:8px; }
+.nav-pill{ background:rgba(13,18,24,.20); -webkit-backdrop-filter:blur(6px); backdrop-filter:blur(6px); border:1px solid #2e3b46; color:var(--text2); padding:3px 10px; border-radius:20px; font-size:.72rem; cursor:pointer; font-family:inherit; letter-spacing:.02em; white-space:nowrap; }
 .nav-pill:active{ transform:translateY(1px); }
 
 /* ready to drink widget */
@@ -295,7 +302,7 @@ body{ background:transparent !important; }
 .shuffle-btn{ background:none; border:1px solid #2e3b46; color:var(--text2); border-radius:14px; padding:4px 10px; font-size:.68rem; cursor:pointer; font-family:inherit; }
 .ready-now-row{ display:flex; gap:8px; overflow-x:auto; -webkit-overflow-scrolling:touch; scrollbar-width:none; padding-bottom:2px; }
 .ready-now-row::-webkit-scrollbar{ display:none; }
-.ready-card{ flex:0 0 auto; width:148px; background:rgba(13,18,24,.20); border:1px solid #2e3b46; border-radius:12px; padding:10px; cursor:pointer; -webkit-backdrop-filter:blur(8px); backdrop-filter:blur(8px); }
+.ready-card{ flex:0 0 auto; width:148px; background:rgba(13,18,24,.10); border:1px solid #2e3b46; border-radius:12px; padding:10px; cursor:pointer; -webkit-backdrop-filter:blur(8px); backdrop-filter:blur(8px); }
 .ready-name{ font-size:.8rem; color:var(--text); line-height:1.3; margin-bottom:4px; }
 .ready-sub{ font-size:.66rem; color:var(--text3); }
 .ready-status{ font-size:.64rem; margin-top:5px; letter-spacing:.05em; }
@@ -309,7 +316,7 @@ body{ background:transparent !important; }
 .stat-overview-row{ font-size:.98rem; color:var(--text); }
 
 /* journal */
-.journal-card{ background:rgba(13,18,24,.20); backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px); border:1px solid #2e3b46; border-radius:12px; padding:12px; margin-bottom:8px; }
+.journal-card{ background:rgba(13,18,24,.10); backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px); border:1px solid #2e3b46; border-radius:12px; padding:12px; margin-bottom:8px; }
 .journal-top{ display:flex; justify-content:space-between; align-items:flex-start; gap:8px; }
 .journal-wine{ color:var(--text); font-size:.9rem; }
 .journal-meta{ display:flex; gap:10px; margin-top:4px; align-items:center; }
@@ -347,7 +354,7 @@ body{ background:transparent !important; }
 .gap-line b{ color:var(--gold3); }
 .discover-cat{ font-size:.62rem; letter-spacing:.14em; text-transform:uppercase; color:var(--gold); margin:14px 0 6px; }
 .discover-cat:first-child{ margin-top:0; }
-.discover-rec{ background:rgba(13,18,24,.20); backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px); border:1px solid #2e3b46; border-radius:10px; padding:11px; margin-bottom:7px; }
+.discover-rec{ background:rgba(13,18,24,.10); backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px); border:1px solid #2e3b46; border-radius:10px; padding:11px; margin-bottom:7px; }
 .discover-rec-name{ color:var(--text); font-size:.88rem; }
 .discover-rec-meta{ font-size:.74rem; margin-top:3px; }
 .discover-store{ color:var(--gold2); }
@@ -361,16 +368,27 @@ body{ background:transparent !important; }
 <!-- ══ MAIN SCREEN ══════════════════════════════════════════════════ -->
 <div class="screen active" id="screen-main">
   <div class="app-header" id="main-header">
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
-      <div class="subtitle" style="margin-bottom:0">Wine Cellar</div>
-      <div class="header-nav">
-        <button class="nav-pill" onclick="showJournal()">📓 Journal</button>
-        <button class="nav-pill" onclick="showStats()">📊 Stats</button>
-        <button class="nav-pill" onclick="showSettings()">⚙ Settings</button>
-      </div>
+    <div class="crest-wrap"><div class="crest-icon"><svg width="72" height="72" viewBox="0 0 86 86" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="43" cy="43" r="41" stroke="currentColor" stroke-width="1"/>
+      <circle cx="43" cy="43" r="36" stroke="currentColor" stroke-width="0.6" opacity=".6"/>
+      <g transform="translate(20,14) scale(0.85)">
+        <svg width="46" height="56" viewBox="0 0 46 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M23 2 C23 10 18 10 18 16" stroke="currentColor" stroke-width="1.2" fill="none"/>
+          <path d="M18 16 C10 14 4 20 6 26 C-1 28 0 38 8 38" stroke="currentColor" stroke-width="1" fill="none" opacity=".7"/>
+          <g stroke="currentColor" stroke-width="1" fill="none">
+            <circle cx="23" cy="20" r="5"/><circle cx="17" cy="27" r="5"/><circle cx="29" cy="27" r="5"/>
+            <circle cx="12" cy="34" r="5"/><circle cx="23" cy="34" r="5"/><circle cx="34" cy="34" r="5"/>
+            <circle cx="17" cy="41" r="5"/><circle cx="29" cy="41" r="5"/><circle cx="23" cy="48" r="5"/>
+          </g>
+        </svg>
+      </g>
+    </svg></div></div>
+    <div class="subtitle" style="margin-bottom:22px">Wine Cellar</div>
+    <div class="header-nav" id="header-nav-row">
+      <button class="nav-pill" onclick="showJournal()">📓 Journal</button>
+      <button class="nav-pill" onclick="showStats()">📊 Stats</button>
+      <button class="nav-pill" onclick="showSettings()">⚙ Settings</button>
     </div>
-    <h1>My Collection</h1>
-    <div class="stats-row" id="stats-row"></div>
     <div class="ready-now" id="ready-now"></div>
     <button class="pair-btn" onclick="openPair()">What should I pour tonight?</button>
   </div>
@@ -935,10 +953,6 @@ function facetValues(key){
 // ── RENDER ──────────────────────────────────────────────────────────
 function renderStats(){
   const total = wines.reduce((s,w)=>s+totalQty(w),0);
-  const byLoc = LOCS.map(l=>({l, n:wines.reduce((s,w)=>s+(w.locations[l]||0),0)}));
-  document.getElementById('stats-row').innerHTML =
-    `<div class="stat-chip"><strong>${total}</strong> bottles</div>` +
-    byLoc.filter(x=>x.n>0).map(x=>`<div class="stat-chip"><strong>${x.n}</strong> ${x.l}</div>`).join('');
   document.getElementById('settings-total').textContent = `${total} bottles`;
 }
 
