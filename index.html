@@ -430,6 +430,15 @@ body{ background:transparent !important; }
         <button class="btn-secondary" onclick="exportCSV()" style="margin-top:6px">Export CSV</button>
       </div>
       <div class="settings-item">
+        <label>Full backup (wines, journal, photos)</label>
+        <div style="font-size:.76rem;color:var(--text3);margin:2px 0 8px">Use this to move your cellar to a new home screen icon or a new phone. CSV export does not include photos or journal entries — this does.</div>
+        <button class="btn-secondary" onclick="exportFullBackup()" style="margin-top:2px">Export Full Backup</button>
+        <div style="height:8px"></div>
+        <button class="btn-secondary" onclick="document.getElementById('backup-file-input').click()">Import Full Backup</button>
+        <input type="file" id="backup-file-input" accept="application/json,.json" style="display:none" onchange="importFullBackup(event)">
+        <div id="backup-status" style="font-size:.76rem;margin-top:8px"></div>
+      </div>
+      <div class="settings-item">
         <label>Total bottles in collection</label>
         <div style="font-size:1.2rem;color:var(--gold3);font-weight:600;margin-top:4px" id="settings-total"></div>
       </div>
@@ -1259,6 +1268,75 @@ function exportCSV(){
   const a = document.createElement('a');
   a.href = 'data:text/csv;charset=utf-8,'+encodeURIComponent(csv);
   a.download = 'wine_cellar.csv'; a.click();
+}
+
+async function exportFullBackup(){
+  const statusEl = document.getElementById('backup-status');
+  if(statusEl){ statusEl.style.color='var(--text3)'; statusEl.textContent = 'Preparing backup…'; }
+  try{
+    const photosById = {};
+    for(const w of wines){
+      const p = await getPhotos(w.id);
+      if(p && p.length) photosById[w.id] = p;
+    }
+    const coverPhoto = await getCover();
+    const backup = {
+      kind: 'wine-cellar-backup',
+      version: 1,
+      exportedAt: new Date().toISOString(),
+      wines,
+      journal,
+      photosById,
+      coverPhoto: coverPhoto || null,
+    };
+    const blob = new Blob([JSON.stringify(backup)], {type:'application/json'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'wine_cellar_backup_' + new Date().toISOString().slice(0,10) + '.json';
+    a.click();
+    setTimeout(()=>URL.revokeObjectURL(url), 5000);
+    if(statusEl){ statusEl.style.color='var(--green-t)'; statusEl.textContent = 'Backup downloaded — ' + wines.length + ' wines, ' + journal.length + ' journal entries.'; }
+  }catch(e){
+    if(statusEl){ statusEl.style.color='var(--red-t)'; statusEl.textContent = 'Could not create backup: ' + e.message; }
+  }
+}
+
+async function importFullBackup(ev){
+  const file = ev.target.files[0]; ev.target.value='';
+  if(!file) return;
+  const statusEl = document.getElementById('backup-status');
+  try{
+    const text = await file.text();
+    const backup = JSON.parse(text);
+    if(backup.kind !== 'wine-cellar-backup' || !Array.isArray(backup.wines)){
+      if(statusEl){ statusEl.style.color='var(--red-t)'; statusEl.textContent = 'This does not look like a valid backup file.'; }
+      return;
+    }
+    const msg = `Import ${backup.wines.length} wines and ${(backup.journal||[]).length} journal entries?\n\nThis will REPLACE all wines and journal entries currently on THIS device. Photos and cover image from the backup will be added. This cannot be undone.`;
+    if(!confirm(msg)) return;
+
+    wines = backup.wines.map(migrateWine);
+    nextId = Math.max(200, ...wines.map(w=>w.id), 199) + 1;
+    save();
+
+    journal = Array.isArray(backup.journal) ? backup.journal : [];
+    saveJournal();
+
+    if(backup.photosById){
+      for(const idStr of Object.keys(backup.photosById)){
+        await setPhotos(Number(idStr), backup.photosById[idStr]);
+      }
+    }
+    if(backup.coverPhoto){
+      await saveCover(backup.coverPhoto);
+    }
+
+    if(statusEl){ statusEl.style.color='var(--green-t)'; statusEl.textContent = 'Import complete — reloading…'; }
+    setTimeout(()=>location.reload(), 800);
+  }catch(e){
+    if(statusEl){ statusEl.style.color='var(--red-t)'; statusEl.textContent = 'Could not import: ' + e.message; }
+  }
 }
 
 async function resetAllData(){
